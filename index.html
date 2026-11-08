@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Purple · Le nostre partite</title>
-<meta name="description" content="Prossima partita, conto alla rovescia, mappe e calendario dei Purple. Stagione 2026/27.">
-<meta name="theme-color" content="#120822">
-<meta property="og:title" content="Purple · Le nostre partite">
-<meta property="og:description" content="Prossima partita, conto alla rovescia, mappe e calendario. Stagione 2026/27.">
+<title>Purple</title>
+<meta name="description" content="Calendario, classifica e allerta rivali della Ecosport Purple.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="Purple">
+<meta property="og:description" content="Calendario, classifica e allerta rivali. Si aggiorna da solo.">
 <meta property="og:type" content="website">
-<!-- Sostituisci TUONOME con il tuo nome utente GitHub -->
-<meta property="og:image" content="https://TUONOME.github.io/purple/og.png">
+<meta property="og:image" content="https://dudushi.github.io/progettoviola/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="icon.png">
@@ -18,269 +17,162 @@
 <meta name="apple-mobile-web-app-title" content="Purple">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
 <style>
 :root{
-  --bg:#f3ecff; --bg-deep:#e6d8ff;
-  --text:#1c0a38; --muted:#6c5794;
-  --surface:rgba(255,255,255,.72); --line:rgba(98,40,190,.16);
-  --purple:#7a2cf0; --orchid:#c13cf2; --ink-on-purple:#ffffff;
-  --win:#0f9f5a; --loss:#d61f5b; --glow:rgba(122,44,240,.32);
-  --display:"Unbounded",ui-rounded,"SF Pro Rounded",system-ui,sans-serif;
-  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --bg:#ffffff; --text:#000000; --ink:#111111;
+  --head1:#f7f3fd; --head2:#d6cbea; --grid:#c9bfdc; --edge:#a99ac4;
+  --sel:#6a2fb5; --sel-text:#ffffff; --muted:#8a8296; --red:#d81e4a; --green:#1d7a12;
+  --ui:Tahoma,"MS Sans Serif",Geneva,Verdana,sans-serif;
+  --comic:Bangers,Impact,"Arial Black",sans-serif;
   color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#120822; --bg-deep:#1d0d38;
-    --text:#f4ecff; --muted:#a690cc;
-    --surface:rgba(255,255,255,.06); --line:rgba(200,160,255,.16);
-    --purple:#8b3dff; --orchid:#d65cff;
-    --win:#4ade80; --loss:#ff6b9a; --glow:rgba(160,80,255,.45);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#120822; --bg-deep:#1d0d38;
-  --text:#f4ecff; --muted:#a690cc;
-  --surface:rgba(255,255,255,.06); --line:rgba(200,160,255,.16);
-  --purple:#8b3dff; --orchid:#d65cff;
-  --win:#4ade80; --loss:#ff6b9a; --glow:rgba(160,80,255,.45);
-  color-scheme:dark;
-}
 *,*::before,*::after{box-sizing:border-box}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
-body{
-  margin:0;min-height:100%;
-  background:
-    radial-gradient(120% 60% at 50% -10%, var(--bg-deep), transparent 70%),
-    var(--bg);
-  color:var(--text);font-family:var(--body);font-size:16px;line-height:1.45;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--orchid);outline-offset:3px;border-radius:12px}
-main{max-width:540px;margin:0 auto;padding:18px 16px 48px}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:12px/1.35 var(--ui);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.page{position:relative;max-width:520px;margin:0 auto;padding:8px max(10px,env(safe-area-inset-left,0px)) 110px}
 
-/* Top bar */
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 18px}
-.brand{display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;color:inherit;cursor:pointer;text-align:left;font:inherit}
-.mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
-  background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff;
-  box-shadow:0 8px 24px var(--glow)}
-.mark svg{width:26px;height:26px}
-.wordmark{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:-.02em;line-height:1}
-.season{font-size:13px;color:var(--muted);margin-top:3px}
-.played{font-size:13px;color:var(--muted);text-align:right;line-height:1.25}
-.played b{display:block;font-family:var(--display);font-weight:800;font-size:18px;color:var(--text)}
+/* ===== quiet aqua header ===== */
+.head{position:relative;display:flex;align-items:center;gap:10px;margin:2px 0 8px;padding:9px 12px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(#fdfbff,#eee7f9);border:1px solid #ddd3ec;box-shadow:inset 0 1px 0 #fff}
+.head::before{content:"";position:absolute;left:4px;right:4px;top:1px;height:46%;border-radius:10px 10px 30% 30%/10px 10px 8px 8px;
+  background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,0))}
+.head > *{position:relative}
+.head .t{flex:1;font:bold 15px/1 Verdana,Geneva,sans-serif;letter-spacing:3px;color:var(--sel)}
+.head .t small{display:block;font:10px var(--ui);letter-spacing:0;color:#8a7fa0;margin-top:4px}
+.orb{width:26px;height:26px;flex:none}
+.d-net{display:block;width:100%;height:58px;margin:14px 0 4px}
 
-/* Hero: the court */
-.court{
-  position:relative;border-radius:30px;overflow:hidden;isolation:isolate;
-  color:var(--ink-on-purple);
-  background:
-    linear-gradient(165deg,#6a1fe0 0%,#8d2cf3 48%,#b23ef0 52%,#d55cf5 100%);
-  box-shadow:0 24px 60px -18px var(--glow),inset 0 0 0 1px rgba(255,255,255,.14);
-}
-.court::before{ /* court lines */
-  content:"";position:absolute;inset:14px;border:2px solid rgba(255,255,255,.28);border-radius:18px;z-index:-1;
-}
-.court::after{ /* attack lines */
-  content:"";position:absolute;left:14px;right:14px;top:calc(50% - 64px);height:128px;
-  border-top:2px solid rgba(255,255,255,.16);border-bottom:2px solid rgba(255,255,255,.16);z-index:-1;
-}
-.half{padding:30px 28px 22px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
-.half.them{justify-content:flex-start;padding-top:22px;padding-bottom:26px}
-.when{font-size:15px;font-weight:600;opacity:.9}
-.rel{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;
-  background:rgba(255,255,255,.18);padding:6px 12px;border-radius:999px;align-self:flex-start;margin-bottom:14px;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.rel i{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:ping 2s infinite}
-.team-us{font-family:var(--display);font-weight:900;font-size:clamp(40px,13vw,62px);line-height:.9;letter-spacing:-.04em}
-.team-them{font-family:var(--display);font-weight:800;font-size:clamp(24px,7.4vw,36px);line-height:1.02;letter-spacing:-.02em;margin:0;overflow-wrap:anywhere}
-.net{position:relative;height:30px;margin:0 6px;display:flex;align-items:center;justify-content:center}
-.net::before{content:"";position:absolute;left:0;right:0;top:50%;height:14px;transform:translateY(-50%);
-  background:
-    repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 1px,transparent 1px 9px),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.55) 0 1px,transparent 1px 7px);
-  border-top:3px solid #fff;border-bottom:2px solid rgba(255,255,255,.7);
-  transform-origin:center;animation:net 900ms cubic-bezier(.2,.8,.2,1) both}
-.net span{position:relative;font-family:var(--display);font-weight:600;font-size:13px;background:#fff;color:#6a1fe0;
-  padding:5px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(40,0,90,.35)}
-.where{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.tag{font-size:14px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.16);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.tag.warn{background:#fff;color:#7a1fa8}
+/* ===== quiet gel alerts ===== */
+.alerts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 14px}
+.alert{display:flex;align-items:center;gap:7px;padding:5px 10px;border-radius:999px;
+  background:linear-gradient(#ffffff,#f6f2fc);border:1px solid #e1d8ef;box-shadow:inset 0 1px 0 #fff;font:11px var(--ui);color:#444}
+.burst{flex:none;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ff9db4,#d81e4a 70%);
+  box-shadow:0 0 0 1px rgba(160,20,50,.25)}
+.alert.ok .burst{background:radial-gradient(circle at 40% 35%,#d6c2f5,#6a2fb5 70%)}
+.alert.even .burst{background:radial-gradient(circle at 40% 35%,#eee,#999 70%)}
+.who{font-weight:bold;color:#222;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gap{margin-left:auto;font:bold 11px Verdana,sans-serif;color:var(--red);white-space:nowrap}
+.alert.ok .gap{color:var(--sel)}
+.alert.even .gap{color:#999}
 
-.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 18px}
-.clock div{background:rgba(20,0,50,.28);border-radius:16px;padding:12px 4px 10px;text-align:center;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-.clock b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(22px,7vw,30px);line-height:1;font-variant-numeric:tabular-nums}
-.clock small{display:block;font-size:12px;opacity:.8;margin-top:6px}
-.live{margin:0 18px;padding:16px;border-radius:18px;background:rgba(20,0,50,.3);text-align:center;
-  font-family:var(--display);font-weight:800;font-size:20px}
-.live i{display:inline-block;width:12px;height:12px;border-radius:50%;background:#ff4d8d;margin-right:10px;animation:ping 1.4s infinite}
+/* ===== MATLAB-like tables ===== */
+.cmd{font:12px "Courier New",Courier,monospace;margin:0 0 6px;color:#222}
+.cmd i{font-style:normal;color:var(--sel)}
+.grid{overflow-x:auto;border:1px solid #7d6ea0;background:#fff;box-shadow:inset 1px 1px 0 #6b5a8e}
+table{border-collapse:collapse;width:100%;font:12px var(--ui);table-layout:fixed}
+#cal col.n{width:30px} #cal col.d{width:50px} #cal col.o{width:46px} #cal col.cf{width:40px} #cal col.r{width:40px}
+#cl col.n{width:30px} #cl col.s{width:auto} #cl col.p{width:34px} #cl col.x{width:28px} #cl col.st{width:42px}
+th,td{border:1px solid var(--grid);padding:4px 6px;white-space:nowrap;height:36px;overflow:hidden;text-overflow:ellipsis}
+#cl th,#cl td{height:32px}
+thead th{background:linear-gradient(var(--head1),var(--head2));font-weight:normal;color:#222;text-align:center;border-color:var(--edge);box-shadow:inset 1px 1px 0 #fff}
+tbody th{background:linear-gradient(90deg,var(--head1),var(--head2));font-weight:normal;color:#333;text-align:right;border-color:var(--edge);box-shadow:inset 1px 1px 0 #fff}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.c{text-align:center}
+tbody tr.past td{color:var(--muted)}
+td.res.w{color:var(--green)!important;font-weight:bold} td.res.l{color:var(--red)!important;font-weight:bold}
+#cal tbody tr{cursor:default}
+tbody tr.sel td{background:var(--sel);color:var(--sel-text)!important;border-color:#7f4fc4}
+tbody tr.sel th{background:#4a1c86;color:#fff}
+@media (hover:hover){#cal tbody tr:not(.sel):hover td{background:#f1ebfb}}
+#cal tbody tr:not(.sel):active td{background:#ece4f8}
+#cl tr.us td{background:var(--sel);color:#fff;font-weight:bold;border-color:#7f4fc4}
+#cl tr.us th{background:#4a1c86;color:#fff}
+#cl tr.riv td.nm::after{content:" !";color:var(--red);font-weight:bold}
+.status{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px max(12px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(#f7f3fd,#e6ddf4);border-top:1px solid var(--edge);box-shadow:0 -1px 0 #fff inset,0 -4px 12px rgba(40,10,80,.12)}
+.status .in{max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.status .txt{flex:1;min-width:0}
+.status .l1{font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status .l2{color:#555;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.status a{flex:none;display:grid;place-items:center;min-width:44px;height:44px;padding:0 10px;border:1px solid #7d6ea0;border-radius:4px;
+  background:linear-gradient(#ffffff,#e4daf3);color:#4a1c86;font:bold 12px var(--ui);text-decoration:none;box-shadow:inset 0 1px 0 #fff}
+.status a:active{background:#d6cbea}
+.foot{margin-top:12px;text-align:center;color:#999;font:10px var(--ui)}
 
-.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;padding:16px 18px 20px}
-.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-decoration:none;
-  min-height:68px;padding:10px 6px;border-radius:18px;font-weight:700;font-size:14px;
-  background:#fff;color:#4a10a8;box-shadow:0 8px 20px rgba(30,0,70,.25);transition:transform .15s}
-.btn:active{transform:scale(.96)}
-.btn svg{width:22px;height:22px}
-.btn.ghost{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
 
-/* Sections */
-h2{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;margin:34px 4px 12px}
-.sub{color:var(--muted);font-size:14px;margin:-6px 4px 14px}
-
-/* Swipe strip */
-.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 14px;margin:0 -16px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.strip::-webkit-scrollbar{display:none}
-.card{flex:0 0 72%;max-width:300px;scroll-snap-align:center;border-radius:24px;padding:18px;
-  background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;min-height:190px}
-.card .d{display:flex;align-items:baseline;gap:8px}
-.card .d b{font-family:var(--display);font-weight:900;font-size:46px;line-height:.9;letter-spacing:-.04em;
-  background:linear-gradient(140deg,var(--purple),var(--orchid));-webkit-background-clip:text;background-clip:text;color:transparent}
-.card .d span{font-weight:600;color:var(--muted);font-size:15px;line-height:1.2}
-.card .o{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.15;letter-spacing:-.01em;margin-top:auto}
-.card .p{font-size:14px;color:var(--muted)}
-.pill{align-self:flex-start;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;
-  background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff}
-.pill.away{background:transparent;color:var(--purple);box-shadow:inset 0 0 0 1.5px var(--purple)}
-
-/* Season bar */
-.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 4px}
-.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--orchid));transition:width 1s}
-
-/* Full list */
-.round{font-family:var(--display);font-weight:600;font-size:15px;color:var(--muted);margin:26px 4px 8px}
-.list{border-radius:24px;background:var(--surface);border:1px solid var(--line);overflow:hidden;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.row{border-top:1px solid var(--line)}
-.row:first-child{border-top:0}
-.row summary{list-style:none;display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
-.row summary::-webkit-details-marker{display:none}
-.date{text-align:center;line-height:1}
-.date b{display:block;font-family:var(--display);font-weight:800;font-size:22px}
-.date span{font-size:12px;color:var(--muted);font-weight:600}
-.info{min-width:0}
-.info .o{font-weight:700;font-size:16px;line-height:1.2}
-.info .w{font-size:13.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
-.time{font-family:var(--display);font-weight:600;font-size:15px}
-.score{font-family:var(--display);font-weight:900;font-size:20px}
-.score.w{color:var(--win)} .score.l{color:var(--loss)}
-.tbd{font-size:12px;color:var(--muted);text-align:right;line-height:1.2}
-.live-tag{font-size:12px;font-weight:800;color:#fff;background:#ff3d7f;padding:4px 8px;border-radius:8px}
-.row.done summary{opacity:.55}
-.row.next summary{background:linear-gradient(90deg,var(--glow),transparent 70%)}
-.month{font-size:13px;font-weight:700;color:var(--muted);padding:12px 16px 4px;border-top:1px solid var(--line)}
-.list > .month:first-child{border-top:0}
-.month + .row{border-top:0}
-.more{padding:0 16px 16px 80px}
-.more .meta{font-size:14px;color:var(--muted);margin-bottom:10px}
-.more .actions{padding:0;grid-template-columns:repeat(3,1fr)}
-.more .btn{min-height:56px;font-size:13px;background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff;box-shadow:none}
-.sets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.sets span{font-family:var(--display);font-weight:600;font-size:13px;padding:4px 9px;border-radius:8px;background:var(--line)}
-.sets .w{color:var(--win)} .sets .l{color:var(--loss)}
-
-.tr{display:grid;grid-template-columns:26px 1fr 30px 30px 52px;gap:8px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);font-size:15px}
-.tr.th{border-top:0;font-size:12px;color:var(--muted);font-weight:600;padding-bottom:6px}
-.tr .pos{font-family:var(--display);font-weight:800;font-size:14px;color:var(--muted)}
-.tr .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tr .c{text-align:center;color:var(--muted)}
-.tr .pt{text-align:right;font-family:var(--display);font-weight:800}
-.tr.th .pt{font-family:var(--body);font-weight:600}
-.tr.us{background:linear-gradient(90deg,var(--glow),transparent 80%)}
-.tr.us .nm,.tr.us .pos{font-weight:800;color:var(--text)}
-.upd{font-size:12px;color:var(--muted);padding:10px 16px 12px;border-top:1px solid var(--line)}
-footer{text-align:center;color:var(--muted);font-size:14px;margin-top:36px}
-footer b{font-family:var(--display);font-weight:800;color:var(--text)}
-
-.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
-
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}80%,100%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
-@keyframes net{from{transform:translateY(-50%) scaleX(0)}to{transform:translateY(-50%) scaleX(1)}}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
-@media (max-width:360px){.more{padding-left:16px}.half{padding-left:22px;padding-right:22px}}
 </style>
 </head>
 <body>
-<main>
-  <header class="top">
-    <button class="brand" id="brand" aria-label="Purple">
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5c-2.2 3.4-2.2 8.4 0 9.5s7.6 1.3 9.3-1.6M12 12c-2.3 1.4-6.4 6-6.2 8M12 12c3.9.4 6.6 3.4 7 6.5"/></svg>
-      </span>
-      <span><span class="wordmark">Purple</span><span class="season" style="display:block">Eccellenza maschile 2026/27</span></span>
-    </button>
-    <div class="played" id="played"></div>
-  </header>
+<div class="page">
 
-  <section class="court" id="hero" aria-live="polite"></section>
+  <div class="head">
+    <div class="t">PURPLE<small>Eccellenza maschile, girone A</small></div>
+    <svg class="orb" viewBox="0 0 46 46" aria-hidden="true">
+      <defs><radialGradient id="og" cx="45%" cy="35%" r="65%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f1eafb"/><stop offset="1" stop-color="#c9b8e6"/></radialGradient></defs>
+      <circle cx="23" cy="23" r="21" fill="url(#og)" stroke="#8f6bbf" stroke-width="1.6"/>
+      <path d="M23 2 C 32 12, 32 34, 23 44 M5 13 C 17 20, 31 22, 41 31 M4 31 C 14 27, 22 14, 26 3" fill="none" stroke="#8f6bbf" stroke-width="2"/>
+      <ellipse cx="17" cy="11" rx="8" ry="4" fill="#fff" opacity=".9"/>
+    </svg>
+  </div>
 
-  <div id="last"></div>
+  <div class="alerts" id="alerts"></div>
 
-  <h2 id="upTitle">Le prossime</h2>
-  <p class="sub" id="upSub">Scorri col dito</p>
-  <div class="strip" id="strip"></div>
+  <p class="cmd">&gt;&gt; <i>classifica</i>('eccellenza A')</p>
+  <div class="grid">
+    <table id="cl"><colgroup><col class="n"><col class="s"><col class="p"><col class="x"><col class="x"><col class="x"><col class="st"></colgroup>
+      <thead><tr><th></th><th>Squadra</th><th>Pt</th><th>G</th><th>V</th><th>P</th><th>Set</th></tr></thead>
+      <tbody id="clRows"></tbody>
+    </table>
+  </div>
 
-  <h2 id="tableTitle">Classifica</h2>
-  <div class="list table" id="table"></div>
 
-  <h2>Tutto il calendario</h2>
-  <div class="bar" aria-hidden="true"><i id="barFill" style="width:0"></i></div>
-  <div id="list"></div>
+  <svg class="d-net" viewBox="0 0 760 58" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <defs><pattern id="mesh" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M8 0H0V8" fill="none" stroke="#111" stroke-width=".7"/></pattern></defs>
+    <rect x="40" y="26" width="680" height="16" fill="url(#mesh)" stroke="#111" stroke-width="1.5"/>
+    <rect x="40" y="22" width="680" height="5" fill="#fff" stroke="#111" stroke-width="1.5"/>
+    <line x1="40" y1="20" x2="40" y2="56" stroke="#111" stroke-width="3"/>
+    <line x1="720" y1="20" x2="720" y2="56" stroke="#111" stroke-width="3"/>
+    <g stroke="#111" stroke-linecap="round" stroke-width="1.5"><line x1="300" y1="6" x2="372" y2="12"/><line x1="312" y1="14" x2="370" y2="16"/><line x1="326" y1="20" x2="372" y2="20"/></g>
+    <g transform="translate(392 14) rotate(30)">
+      <circle r="11" fill="#fff" stroke="#111" stroke-width="2"/>
+      <path d="M0 -11 C 5 -4, 5 4, 0 11 M-10 -5 C -3 -1, 5 1, 10 5 M-10 5 C -5 3, 1 -5, 3 -10" fill="none" stroke="#111" stroke-width="1.4"/>
+    </g>
+  </svg>
 
-  <footer><b>Forza Purple</b> 💜<br>Tocca una partita per mappa e calendario</footer>
-</main>
+  <p class="cmd">&gt;&gt; <i>calendario</i>('purple')</p>
+  <div class="grid">
+    <table id="cal"><colgroup><col class="n"><col class="d"><col class="o"><col><col class="cf"><col class="r"></colgroup>
+      <thead><tr><th></th><th>Data</th><th>Ora</th><th>Avversario</th><th>C/F</th><th>Ris.</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="status" id="status" aria-live="polite"></div>
+
+  <p class="foot" id="foot"></p>
+</div>
 
 <script>
-/* ===== Dati =====
-   data.json viene riscritto in automatico da GitHub Actions
-   leggendo il calendario ufficiale del campionato. */
-const TEAM = /purple/i;
-function fromData(json){
+const TEAM = /purple/i, RIVALS = ["Kolbe","Icaro M1"], DUR = 2*3600e3;
+const SNAPSHOT = {"updated":"2026-11-08T14:00+01:00","matches":[{"g":1,"n":611105,"t":"2026-11-02T21:00:00+01:00","a":"PGS Pianezza","b":"Polisport Nuncas","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza","score":[3,0],"sets":[[25,20],[25,17],[25,19]]},{"g":1,"n":611102,"t":"2026-11-03T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Camaleonte Brandizzo","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati","score":[3,2],"sets":[[25,10],[24,26],[25,23],[25,18],[15,12]]},{"g":1,"n":611103,"t":"2026-11-05T20:45:00+01:00","a":"Ecosport Purple","b":"Kolbe","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino","score":[2,3],"sets":[[25,22],[17,25],[16,25],[25,22],[14,16]]},{"g":10,"n":611149,"t":"2026-11-05T21:15:00+01:00","a":"Caselette Volley","b":"Icaro M1","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette","score":[0,3],"sets":[[19,25],[19,25],[19,25]]},{"g":1,"n":611101,"t":"2026-11-05T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Kubo Volley","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa","score":[3,0],"sets":[[25,16],[25,18],[25,21]]},{"g":2,"n":611109,"t":"2026-11-11T21:15:00+01:00","a":"Camaleonte Brandizzo","b":"Ecosport Purple","venue":"Via Nicolao Cena,2","city":"Brandizzo","q":"via Nicolao Cena,2 Brandizzo"},{"g":3,"n":611112,"t":"2026-11-19T20:45:00+01:00","a":"Ecosport Purple","b":"Maschile B Linnaeus","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":13,"n":611165,"t":"2026-11-26T20:45:00+01:00","a":"Ecosport Purple","b":"ASD Ecosportorino Dark","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":5,"n":611121,"t":"2026-12-03T20:45:00+01:00","a":"Ecosport Purple","b":"Kubo Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":6,"n":611130,"t":"2026-12-10T20:45:00+01:00","a":"Ecosport Purple","b":"Icaro M1","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":7,"n":611132,"t":"2026-12-14T21:00:00+01:00","a":"PGS Pianezza","b":"Ecosport Purple","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"},{"g":8,"n":611139,"t":"2027-01-14T20:45:00+01:00","a":"Ecosport Purple","b":"Polisport Nuncas","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":9,"n":611143,"t":"2027-01-21T21:15:00+01:00","a":"Caselette Volley","b":"Ecosport Purple","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette"},{"g":10,"n":611148,"t":"2027-01-24T18:00:00+01:00","a":"Kolbe","b":"Ecosport Purple","venue":"Pal. Aprica","city":"Torino","q":"Pal. Aprica Via Bard, 39 Torino"},{"g":11,"n":611154,"t":"2027-02-04T20:45:00+01:00","a":"Ecosport Purple","b":"Camaleonte Brandizzo","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":12,"n":611157,"t":"2027-02-18T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Ecosport Purple","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"},{"g":4,"n":611120,"t":"2027-02-24T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Ecosport Purple","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati"},{"g":14,"n":611166,"t":"2027-03-03T21:00:00+01:00","a":"Kubo Volley","b":"Ecosport Purple","venue":"Palestra Palazzeschi","city":"Torino","q":"Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"},{"g":15,"n":611175,"t":"2027-03-12T20:30:00+01:00","a":"Icaro M1","b":"Ecosport Purple","venue":"Impianto Sportivo Luini","city":"Torino","q":"Impianto Sportivo Luini , Via luini 170, Torino"},{"g":16,"n":611177,"t":"2027-03-18T20:45:00+01:00","a":"Ecosport Purple","b":"PGS Pianezza","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":17,"n":611184,"t":"2027-04-01T21:00:00+02:00","a":"Polisport Nuncas","b":"Ecosport Purple","venue":"Cecchi","city":"Torino","q":"Cecchi Via Cecchi 16, Torino","note":"Ammessi solo tesserati"},{"g":18,"n":611188,"t":"2027-04-08T20:45:00+02:00","a":"Ecosport Purple","b":"Caselette Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"}]};
+const $ = s => document.querySelector(s);
+const enc = encodeURIComponent;
+const fmt = (t,o) => new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",...o}).format(t);
+let LEAGUE = [], M = [], UPDATED = "", selected = -1;
+
+function scoreOf(x){
+  if(x.score && (x.score[0] || x.score[1])) return x.score;
+  if(x.sets && x.sets.length){ const w = x.sets.filter(s => s[0]>s[1]).length; return [w, x.sets.length-w]; }
+  return null;
+}
+function use(json){
   UPDATED = json.updated || "";
   LEAGUE = (json.matches || []).map(x => ({...x, t: Date.parse(x.t)})).filter(x => !isNaN(x.t));
-  return LEAGUE.filter(x => TEAM.test(x.a) || TEAM.test(x.b)).sort((p,q) => p.t-q.t).map((x,i) => {
-    const home = TEAM.test(x.a), flip = s => home ? s : [s[1], s[0]];
-    return { i, g:x.g, opp: home ? x.b : x.a, home, venue:x.venue||"", city:x.city||"", q:x.q||"", note:x.note||"",
-      res: x.sets && x.sets.length ? x.sets.map(flip) : null,
-      score: x.score ? flip(x.score) : null, t:x.t };
+  M = LEAGUE.filter(x => TEAM.test(x.a) || TEAM.test(x.b)).sort((p,q) => p.t-q.t).map(x => {
+    const home = TEAM.test(x.a), flip = s => home ? s : [s[1], s[0]], sc = scoreOf(x);
+    return { t:x.t, home, opp: home ? x.b : x.a, venue:x.venue||"", city:x.city||"", q:x.q||"", note:x.note||"",
+      sets:(x.sets||[]).map(flip), score: sc ? flip(sc) : null };
   });
-}
-async function loadMatches(){
-  try{
-    const r = await fetch("data.json?t="+Date.now(), {cache:"no-store"});
-    if(!r.ok) throw 0;
-    const j = await r.json();
-    try{ localStorage.setItem("purple-data", JSON.stringify(j)); }catch(e){}
-    return fromData(j);
-  }catch(e){
-    try{ const c = JSON.parse(localStorage.getItem("purple-data") || "null"); if(c) return fromData(c); }catch(e){}
-    return [];
-  }
-}
-function scoreOf(m){
-  if(m.score && (m.score[0] || m.score[1])) return m.score;
-  if(m.res){ const w = m.res.filter(s => s[0]>s[1]).length; return [w, m.res.length-w]; }
-  return null;
 }
 function standings(){
   const T = {}, add = n => T[n] || (T[n] = {n, pt:0, g:0, v:0, p:0, sv:0, sp:0, pf:0, ps:0});
   LEAGUE.forEach(x => {
     add(x.a); add(x.b);
-    const sc = scoreOf({score:x.score, res:x.sets && x.sets.length ? x.sets : null});
-    if(!sc) return;
+    const sc = scoreOf(x); if(!sc) return;
     const A = T[x.a], B = T[x.b];
     A.g++; B.g++; A.sv += sc[0]; A.sp += sc[1]; B.sv += sc[1]; B.sp += sc[0];
     (x.sets || []).forEach(s => { A.pf += s[0]; A.ps += s[1]; B.pf += s[1]; B.ps += s[0]; });
@@ -291,219 +183,77 @@ function standings(){
   const q = (a,b) => b ? a/b : (a ? 1e9 : 0);
   return Object.values(T).sort((a,b) => b.pt-a.pt || b.v-a.v || q(b.sv,b.sp)-q(a.sv,a.sp) || q(b.pf,b.ps)-q(a.pf,a.ps) || a.n.localeCompare(b.n));
 }
-function renderTable(){
-  const box = $("#table"), others = LEAGUE.some(x => !TEAM.test(x.a) && !TEAM.test(x.b));
-  $("#tableTitle").hidden = box.hidden = !others;
-  if(!others) return;
-  const rows = standings();
-  box.innerHTML = `<div class="tr th"><span>#</span><span>Squadra</span><span class="c">G</span><span class="c">V</span><span class="pt">Punti</span></div>` +
-    rows.map((r,k) => `<div class="tr${TEAM.test(r.n) ? " us" : ""}"><span class="pos">${k+1}</span><span class="nm">${TEAM.test(r.n) ? "Purple" : r.n}</span><span class="c">${r.g}</span><span class="c">${r.v}</span><span class="pt">${r.pt}</span></div>`).join("") +
-    (UPDATED ? `<div class="upd">Aggiornata ${fmt(Date.parse(UPDATED),{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}</div>` : "");
-}
 
-/* ===== App ===== */
-const TZ = "Europe/Rome", DUR = 2*3600e3, enc = encodeURIComponent;
-let M = [], LEAGUE = [], UPDATED = "";
-const $ = s => document.querySelector(s);
-const fmt = (t,o) => new Intl.DateTimeFormat("it-IT",{timeZone:TZ,...o}).format(t);
-const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
-const wdShort = t => cap(fmt(t,{weekday:"short"}).replace(".",""));
-const wdLong = t => cap(fmt(t,{weekday:"long"}));
-const dayN = t => fmt(t,{day:"numeric"});
-const monS = t => fmt(t,{month:"short"}).replace(".","");
-const monL = t => fmt(t,{month:"long"});
-const hm = t => fmt(t,{hour:"2-digit",minute:"2-digit"});
-const ymd = t => new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(t);
-const dayDiff = (t,now) => Math.round((Date.parse(ymd(t))-Date.parse(ymd(now)))/864e5);
-const status = (m,now) => now < m.t ? "up" : now < m.t+DUR ? "live" : "done";
-const won = r => r.filter(s=>s[0]>s[1]).length;
-const placeText = m => m.home ? "In casa" : [m.venue,m.city].filter(Boolean).join(", ");
-const mapsQ = m => m.q;
-
-function rel(t,now){
-  const n = dayDiff(t,now);
-  if(n===0) return "Stasera si gioca";
-  if(n===1) return "Domani";
-  if(n<7) return `Tra ${n} giorni`;
-  if(n<14) return "Tra una settimana";
-  return `Tra ${Math.round(n/7)} settimane`;
-}
-function gcal(m){
-  const z = t => new Date(t).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
-  const loc = m.q || (m.home ? "In casa" : placeText(m));
-  return "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    + "&text="+enc("🏐 Purple vs "+m.opp)
-    + "&dates="+z(m.t)+"/"+z(m.t+DUR)
-    + "&location="+enc(loc)
-    + "&details="+enc((m.note? m.note+"\n":"")+"Forza Purple 💜");
-}
-function wa(m){
-  const txt = `🏐 Purple vs ${m.opp}\n📅 ${wdLong(m.t)} ${dayN(m.t)} ${monL(m.t)}, ore ${hm(m.t)}\n📍 ${m.home ? "In casa" : placeText(m)}${m.note? "\n🔒 "+m.note:""}\n💜 Forza Purple!`;
-  return "https://wa.me/?text="+enc(txt);
-}
-const ICON = {
-  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
-  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"/></svg>',
-  wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.6A9 9 0 0 1 7.7 19.5L3 21l1.5-4.5A9 9 0 1 1 21 11.6z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>'
-};
-function actions(m, inHero){
-  const q = mapsQ(m), c = inHero ? "btn" : "btn";
-  return `<div class="actions">
-    ${q ? `<a class="${c}" href="https://www.google.com/maps/search/?api=1&query=${enc(q)}" target="_blank" rel="noopener">${ICON.pin}<span>Portami lì</span></a>` : ""}
-    <a class="${c}" href="${gcal(m)}" target="_blank" rel="noopener">${ICON.cal}<span>Calendario</span></a>
-    <a class="${c}${inHero?" ghost":""}" href="${wa(m)}" target="_blank" rel="noopener">${ICON.wa}<span>Manda nel gruppo</span></a>
-  </div>`;
-}
-
-let currentKey = "";
 function render(){
-  const now = Date.now();
-  const next = M.find(m => now < m.t+DUR);
-  const done = M.filter(m => status(m,now)==="done");
-  currentKey = next ? next.i+":"+status(next,now) : "end";
+  const now = Date.now(), tab = standings();
+  const us = tab.find(r => TEAM.test(r.n));
 
-  $("#played").innerHTML = `<b>${done.length}/${M.length}</b>giocate`;
-  requestAnimationFrame(()=> $("#barFill").style.width = (done.length/M.length*100)+"%");
+  // alerts
+  $("#alerts").innerHTML = RIVALS.map(r => {
+    const t = tab.find(x => x.n === r) || {pt:0}, d = (us ? us.pt : 0) - t.pt, abs = Math.abs(d);
+    const cls = d > 0 ? "ok" : d < 0 ? "" : "even";
+    const what = d < 0 ? `ci sta davanti di ${abs} ${abs===1?"punto":"punti"}` : d > 0 ? `è dietro di ${abs} ${abs===1?"punto":"punti"}` : "pari punti";
+    return `<div class="alert ${cls}" role="status" aria-label="${r}: ${what}"><span class="burst" aria-hidden="true"></span><span class="who">${r}</span><span class="gap">${d>0?"+":d<0?"−":"="}${d===0?"":abs+" pt"}</span></div>`;
+  }).join("");
 
-  // Hero
-  const hero = $("#hero");
-  if(!next){
-    hero.innerHTML = `<div class="half"><div class="team-us">Purple</div></div><div class="net"><span>fine stagione</span></div><div class="half them"><h1 class="team-them">Grazie a tutti, ci vediamo l’anno prossimo</h1></div>`;
-  } else {
-    const live = status(next,now)==="live";
-    hero.innerHTML = `
-      <div class="half">
-        <span class="rel"><i></i>${live ? "Si gioca adesso" : rel(next.t,now)}</span>
-        <div class="when">${wdLong(next.t)} ${dayN(next.t)} ${monL(next.t)}, ore ${hm(next.t)}</div>
-        <div class="team-us">Purple</div>
-      </div>
-      <div class="net" aria-hidden="true"><span>vs</span></div>
-      <div class="half them">
-        <h1 class="team-them">${next.opp}</h1>
-        <div class="where">
-          <span class="tag">${next.home ? "🏠 In casa" : "🚐 Trasferta"+(next.city?" a "+next.city:"")}</span>
-          ${!next.home && next.venue ? `<span class="tag">${next.venue}</span>` : ""}
-          ${next.note ? `<span class="tag warn">🔒 ${next.note}</span>` : ""}
-        </div>
-      </div>
-      ${live ? `<div class="live"><i></i>In campo ora</div>` :
-      `<div class="clock" role="timer" aria-label="Conto alla rovescia">
-        <div><b id="cd-d">0</b><small>giorni</small></div>
-        <div><b id="cd-h">0</b><small>ore</small></div>
-        <div><b id="cd-m">0</b><small>minuti</small></div>
-        <div><b id="cd-s">0</b><small>secondi</small></div>
-      </div>`}
-      ${actions(next,true)}`;
+  // calendar
+  const nextI = M.findIndex(m => now < m.t + DUR);
+  if(selected < 0) selected = nextI >= 0 ? nextI : M.length-1;
+  $("#rows").innerHTML = M.map((m,i) => {
+    const done = now >= m.t + DUR, sc = m.score;
+    return `<tr data-i="${i}" class="${done?"past":""}${i===selected?" sel":""}">
+      <th>${i+1}</th>
+      <td class="num">${fmt(m.t,{day:"2-digit",month:"2-digit"})}</td>
+      <td class="num">${fmt(m.t,{hour:"2-digit",minute:"2-digit"})}</td>
+      <td>${m.opp}</td>
+      <td class="c">${m.home?"C":"F"}</td>
+      <td class="c res${sc ? (sc[0]>sc[1]?" w":" l") : ""}">${sc ? sc[0]+"-"+sc[1] : (done ? "?" : "")}</td>
+    </tr>`;
+  }).join("");
+  status();
+
+  // standings
+  $("#clRows").innerHTML = tab.map((r,k) => `<tr class="${TEAM.test(r.n)?"us":RIVALS.includes(r.n)?"riv":""}">
+    <th>${k+1}</th><td class="nm">${TEAM.test(r.n)?"Purple":r.n}</td><td class="num"><b>${r.pt}</b></td><td class="num">${r.g}</td>
+    <td class="num">${r.v}</td><td class="num">${r.p}</td><td class="c">${r.sv}-${r.sp}</td></tr>`).join("");
+
+  $("#foot").textContent = UPDATED ? "aggiornato " + fmt(Date.parse(UPDATED),{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+}
+function status(){
+  const m = M[selected];
+  if(!m){ $("#status").innerHTML = '<div class="in"><div class="txt">Ready</div></div>'; return; }
+  const z = t => new Date(t).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+  const cal = "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+enc("🏐 Purple vs "+m.opp)+"&dates="+z(m.t)+"/"+z(m.t+DUR)+"&location="+enc(m.q);
+  const when = fmt(m.t,{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"") + ", " + fmt(m.t,{hour:"2-digit",minute:"2-digit"});
+  const sets = m.sets.length ? m.sets.map(s => s.join("-")).join("  ") : "";
+  const l2 = sets || ((m.home ? "In casa, " + m.venue : m.venue + ", " + m.city) + (m.note ? " · " + m.note : ""));
+  $("#status").innerHTML = `<div class="in"><div class="txt"><div class="l1">${when} · ${m.opp}</div><div class="l2">${l2}</div></div>`
+    + (m.q ? `<a href="https://maps.apple.com/?q=${enc(m.q)}" target="_blank" rel="noopener">Mappa</a>` : "")
+    + (Date.now() < m.t ? `<a href="${cal}" target="_blank" rel="noopener">+ Cal</a>` : "")
+    + `</div>`;
+}
+$("#rows").addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-i]"); if(!tr) return;
+  selected = +tr.dataset.i;
+  document.querySelectorAll("#rows tr").forEach(r => r.classList.toggle("sel", r === tr));
+  status();
+});
+
+async function load(){
+  try{
+    const r = await fetch("data.json?t="+Date.now(), {cache:"no-store"});
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    try{ localStorage.setItem("purple-data", JSON.stringify(j)); }catch(e){}
+    return j;
+  }catch(e){
+    try{ const c = JSON.parse(localStorage.getItem("purple-data") || "null"); if(c) return c; }catch(e){}
+    return SNAPSHOT;
   }
-
-  // Last result
-  const last = [...done].reverse().find(m => scoreOf(m));
-  $("#last").innerHTML = last ? (()=>{
-    const [w,l] = scoreOf(last), win = w>l;
-    return `<h2>${win ? "Ultima: vinta 🎉" : "Ultima partita"}</h2>
-      <div class="list"><details class="row" open><summary>
-        <div class="date"><b>${dayN(last.t)}</b><span>${monS(last.t)}</span></div>
-        <div class="info"><div class="o">Purple vs ${last.opp}</div><div class="w">${placeText(last)}</div></div>
-        <div class="score ${win?"w":"l"}">${w}–${l}</div></summary>
-        <div class="more"><div class="sets">${(last.res||[]).map(s=>`<span class="${s[0]>s[1]?"w":"l"}">${s[0]}–${s[1]}</span>`).join("")}</div></div>
-      </details></div>`;
-  })() : "";
-
-  // Strip
-  const ups = M.filter(m => now < m.t && m !== next);
-  $("#strip").innerHTML = ups.map(m => `
-    <a class="card" href="#p${m.i}" data-open="${m.i}">
-      <span class="pill ${m.home?"":"away"}">${m.home ? "In casa" : "Trasferta"}</span>
-      <div class="d"><b>${dayN(m.t)}</b><span>${monL(m.t)}<br>${wdShort(m.t)}, ${hm(m.t)}</span></div>
-      <div class="o">${m.opp}</div>
-      <div class="p">${placeText(m)}${m.note ? "<br>🔒 "+m.note : ""}</div>
-    </a>`).join("");
-  $("#upTitle").hidden = $("#upSub").hidden = $("#strip").hidden = !ups.length;
-
-  // Full list
-  let html = "", lastRound = "", lastMonth = "";
-  M.forEach(m => {
-    const round = (m.g || m.i+1) <= Math.ceil(M.length/2) ? "Andata" : "Ritorno";
-    const mk = ymd(m.t).slice(0,7);
-    if(round !== lastRound){ if(lastRound) html += "</div>"; html += `<div class="round">${round}</div><div class="list">`; lastRound = round; lastMonth = ""; }
-    if(mk !== lastMonth){ html += `<div class="month">${cap(monL(m.t))} ${fmt(m.t,{year:"numeric"})}</div>`; lastMonth = mk; }
-    const st = status(m,now);
-    let right;
-    const sc = scoreOf(m);
-    if(sc){ const [w,l] = sc; right = `<div class="score ${w>l?"w":"l"}">${w}–${l}</div>`; }
-    else if(st==="done") right = `<div class="tbd">Risultato<br>in arrivo</div>`;
-    else if(st==="live") right = `<div class="live-tag">Live</div>`;
-    else right = `<div class="time">${hm(m.t)}</div>`;
-    html += `<details class="row ${st}${next && m===next ? " next":""}" id="p${m.i}"><summary>
-        <div class="date"><b>${dayN(m.t)}</b><span>${wdShort(m.t)}</span></div>
-        <div class="info"><div class="o">${m.opp}</div><div class="w">${m.home ? "🏠 In casa" : "🚐 "+placeText(m)}${m.note ? "<br>🔒 "+m.note : ""}</div></div>
-        ${right}</summary>
-        <div class="more">
-          <div class="meta">${wdLong(m.t)} ${dayN(m.t)} ${monL(m.t)}, ore ${hm(m.t)}</div>
-          ${m.res ? `<div class="sets">${m.res.map(s=>`<span class="${s[0]>s[1]?"w":"l"}">${s[0]}–${s[1]}</span>`).join("")}</div>` : ""}
-          ${st!=="done" ? actions(m,false) : ""}
-        </div></details>`;
-  });
-  $("#list").innerHTML = html + "</div>";
-
-  renderTable();
-  tick();
-  return last;
 }
-
-function tick(){
-  const now = Date.now();
-  const next = M.find(m => now < m.t+DUR);
-  const key = next ? next.i+":"+status(next,now) : "end";
-  if(key !== currentKey){ render(); return; }
-  if(!next || now >= next.t) return;
-  let s = Math.floor((next.t-now)/1000);
-  const d = Math.floor(s/86400); s%=86400;
-  const h = Math.floor(s/3600); s%=3600;
-  const mi = Math.floor(s/60); s%=60;
-  const set = (id,v,p) => { const el = document.getElementById(id); if(el) el.textContent = p ? String(v).padStart(2,"0") : v; };
-  set("cd-d",d); set("cd-h",h,1); set("cd-m",mi,1); set("cd-s",s,1);
-}
-
-// Open a match from the strip
-document.addEventListener("click", e => {
-  const a = e.target.closest("[data-open]");
-  if(!a) return;
-  e.preventDefault();
-  const el = document.getElementById("p"+a.dataset.open);
-  if(el){ el.open = true; el.scrollIntoView({behavior:"smooth",block:"center"}); }
-});
-
-function confetti(){
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const c = document.createElement("canvas"); c.className = "confetti"; document.body.appendChild(c);
-  const x = c.getContext("2d"), r = devicePixelRatio || 1;
-  const W = c.width = innerWidth*r, H = c.height = innerHeight*r;
-  const cols = ["#8b3dff","#d65cff","#c9a8ff","#ffffff","#6a1fe0","#ff7ad9"];
-  const P = Array.from({length:170},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.3,vx:(Math.random()-.5)*18*r,vy:(-Math.random()*16-6)*r,
-    s:(Math.random()*7+5)*r,a:Math.random()*6,va:(Math.random()-.5)*.35,c:cols[Math.random()*cols.length|0]}));
-  let f = 0;
-  (function step(){
-    x.clearRect(0,0,W,H);
-    P.forEach(p=>{p.vy+=.38*r;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
-      x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
-    if(++f < 200) requestAnimationFrame(step); else c.remove();
-  })();
-}
-$("#brand").addEventListener("click", confetti);
-
-loadMatches().then(list => {
-  M = list;
-  if(!M.length){ $("#hero").innerHTML = `<div class="half"><div class="team-us">Purple</div></div><div class="half them"><h1 class="team-them">Calendario non raggiungibile</h1><div class="when">Controlla la connessione e riapri la pagina.</div></div>`; return; }
-  const last = render();
-  setInterval(tick, 1000);
-  const sc = last && scoreOf(last);
-  if(sc && sc[0] > sc[1] && Date.now()-last.t < 4*864e5) setTimeout(confetti, 500);
-});
-// Ricarica i dati quando si torna sulla pagina
-document.addEventListener("visibilitychange", () => {
-  if(document.visibilityState==="visible") loadMatches().then(list => { M = list; render(); });
-});
+use(SNAPSHOT); render();
+load().then(j => { use(j); render(); });
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") load().then(j => { use(j); render(); }); });
 </script>
 </body>
 </html>
