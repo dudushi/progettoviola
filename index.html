@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Purple · Le nostre partite</title>
+<meta name="description" content="Prossima partita, conto alla rovescia, mappe e calendario dei Purple. Stagione 2026/27.">
+<meta name="theme-color" content="#120822">
+<meta property="og:title" content="Purple · Le nostre partite">
+<meta property="og:description" content="Prossima partita, conto alla rovescia, mappe e calendario. Stagione 2026/27.">
+<meta property="og:type" content="website">
+<!-- Sostituisci TUONOME con il tuo nome utente GitHub -->
+<meta property="og:image" content="https://TUONOME.github.io/purple/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-title" content="Purple">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3ecff; --bg-deep:#e6d8ff;
+  --text:#1c0a38; --muted:#6c5794;
+  --surface:rgba(255,255,255,.72); --line:rgba(98,40,190,.16);
+  --purple:#7a2cf0; --orchid:#c13cf2; --ink-on-purple:#ffffff;
+  --win:#0f9f5a; --loss:#d61f5b; --glow:rgba(122,44,240,.32);
+  --display:"Unbounded",ui-rounded,"SF Pro Rounded",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#120822; --bg-deep:#1d0d38;
+    --text:#f4ecff; --muted:#a690cc;
+    --surface:rgba(255,255,255,.06); --line:rgba(200,160,255,.16);
+    --purple:#8b3dff; --orchid:#d65cff;
+    --win:#4ade80; --loss:#ff6b9a; --glow:rgba(160,80,255,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#120822; --bg-deep:#1d0d38;
+  --text:#f4ecff; --muted:#a690cc;
+  --surface:rgba(255,255,255,.06); --line:rgba(200,160,255,.16);
+  --purple:#8b3dff; --orchid:#d65cff;
+  --win:#4ade80; --loss:#ff6b9a; --glow:rgba(160,80,255,.45);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+body{
+  margin:0;min-height:100%;
+  background:
+    radial-gradient(120% 60% at 50% -10%, var(--bg-deep), transparent 70%),
+    var(--bg);
+  color:var(--text);font-family:var(--body);font-size:16px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orchid);outline-offset:3px;border-radius:12px}
+main{max-width:540px;margin:0 auto;padding:18px 16px 48px}
+
+/* Top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 18px}
+.brand{display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;color:inherit;cursor:pointer;text-align:left;font:inherit}
+.mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff;
+  box-shadow:0 8px 24px var(--glow)}
+.mark svg{width:26px;height:26px}
+.wordmark{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:-.02em;line-height:1}
+.season{font-size:13px;color:var(--muted);margin-top:3px}
+.played{font-size:13px;color:var(--muted);text-align:right;line-height:1.25}
+.played b{display:block;font-family:var(--display);font-weight:800;font-size:18px;color:var(--text)}
+
+/* Hero: the court */
+.court{
+  position:relative;border-radius:30px;overflow:hidden;isolation:isolate;
+  color:var(--ink-on-purple);
+  background:
+    linear-gradient(165deg,#6a1fe0 0%,#8d2cf3 48%,#b23ef0 52%,#d55cf5 100%);
+  box-shadow:0 24px 60px -18px var(--glow),inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.court::before{ /* court lines */
+  content:"";position:absolute;inset:14px;border:2px solid rgba(255,255,255,.28);border-radius:18px;z-index:-1;
+}
+.court::after{ /* attack lines */
+  content:"";position:absolute;left:14px;right:14px;top:calc(50% - 64px);height:128px;
+  border-top:2px solid rgba(255,255,255,.16);border-bottom:2px solid rgba(255,255,255,.16);z-index:-1;
+}
+.half{padding:30px 28px 22px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
+.half.them{justify-content:flex-start;padding-top:22px;padding-bottom:26px}
+.when{font-size:15px;font-weight:600;opacity:.9}
+.rel{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;
+  background:rgba(255,255,255,.18);padding:6px 12px;border-radius:999px;align-self:flex-start;margin-bottom:14px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.rel i{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:ping 2s infinite}
+.team-us{font-family:var(--display);font-weight:900;font-size:clamp(40px,13vw,62px);line-height:.9;letter-spacing:-.04em}
+.team-them{font-family:var(--display);font-weight:800;font-size:clamp(24px,7.4vw,36px);line-height:1.02;letter-spacing:-.02em;margin:0;overflow-wrap:anywhere}
+.net{position:relative;height:30px;margin:0 6px;display:flex;align-items:center;justify-content:center}
+.net::before{content:"";position:absolute;left:0;right:0;top:50%;height:14px;transform:translateY(-50%);
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 1px,transparent 1px 9px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.55) 0 1px,transparent 1px 7px);
+  border-top:3px solid #fff;border-bottom:2px solid rgba(255,255,255,.7);
+  transform-origin:center;animation:net 900ms cubic-bezier(.2,.8,.2,1) both}
+.net span{position:relative;font-family:var(--display);font-weight:600;font-size:13px;background:#fff;color:#6a1fe0;
+  padding:5px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(40,0,90,.35)}
+.where{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{font-size:14px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.16);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tag.warn{background:#fff;color:#7a1fa8}
+
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 18px}
+.clock div{background:rgba(20,0,50,.28);border-radius:16px;padding:12px 4px 10px;text-align:center;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.clock b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(22px,7vw,30px);line-height:1;font-variant-numeric:tabular-nums}
+.clock small{display:block;font-size:12px;opacity:.8;margin-top:6px}
+.live{margin:0 18px;padding:16px;border-radius:18px;background:rgba(20,0,50,.3);text-align:center;
+  font-family:var(--display);font-weight:800;font-size:20px}
+.live i{display:inline-block;width:12px;height:12px;border-radius:50%;background:#ff4d8d;margin-right:10px;animation:ping 1.4s infinite}
+
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;padding:16px 18px 20px}
+.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-decoration:none;
+  min-height:68px;padding:10px 6px;border-radius:18px;font-weight:700;font-size:14px;
+  background:#fff;color:#4a10a8;box-shadow:0 8px 20px rgba(30,0,70,.25);transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn svg{width:22px;height:22px}
+.btn.ghost{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+
+/* Sections */
+h2{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.02em;margin:34px 4px 12px}
+.sub{color:var(--muted);font-size:14px;margin:-6px 4px 14px}
+
+/* Swipe strip */
+.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 14px;margin:0 -16px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.strip::-webkit-scrollbar{display:none}
+.card{flex:0 0 72%;max-width:300px;scroll-snap-align:center;border-radius:24px;padding:18px;
+  background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;min-height:190px}
+.card .d{display:flex;align-items:baseline;gap:8px}
+.card .d b{font-family:var(--display);font-weight:900;font-size:46px;line-height:.9;letter-spacing:-.04em;
+  background:linear-gradient(140deg,var(--purple),var(--orchid));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card .d span{font-weight:600;color:var(--muted);font-size:15px;line-height:1.2}
+.card .o{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.15;letter-spacing:-.01em;margin-top:auto}
+.card .p{font-size:14px;color:var(--muted)}
+.pill{align-self:flex-start;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;
+  background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff}
+.pill.away{background:transparent;color:var(--purple);box-shadow:inset 0 0 0 1.5px var(--purple)}
+
+/* Season bar */
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 4px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--orchid));transition:width 1s}
+
+/* Full list */
+.round{font-family:var(--display);font-weight:600;font-size:15px;color:var(--muted);margin:26px 4px 8px}
+.list{border-radius:24px;background:var(--surface);border:1px solid var(--line);overflow:hidden;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.row{border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row summary{list-style:none;display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
+.row summary::-webkit-details-marker{display:none}
+.date{text-align:center;line-height:1}
+.date b{display:block;font-family:var(--display);font-weight:800;font-size:22px}
+.date span{font-size:12px;color:var(--muted);font-weight:600}
+.info{min-width:0}
+.info .o{font-weight:700;font-size:16px;line-height:1.2}
+.info .w{font-size:13.5px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+.time{font-family:var(--display);font-weight:600;font-size:15px}
+.score{font-family:var(--display);font-weight:900;font-size:20px}
+.score.w{color:var(--win)} .score.l{color:var(--loss)}
+.tbd{font-size:12px;color:var(--muted);text-align:right;line-height:1.2}
+.live-tag{font-size:12px;font-weight:800;color:#fff;background:#ff3d7f;padding:4px 8px;border-radius:8px}
+.row.done summary{opacity:.55}
+.row.next summary{background:linear-gradient(90deg,var(--glow),transparent 70%)}
+.month{font-size:13px;font-weight:700;color:var(--muted);padding:12px 16px 4px;border-top:1px solid var(--line)}
+.list > .month:first-child{border-top:0}
+.month + .row{border-top:0}
+.more{padding:0 16px 16px 80px}
+.more .meta{font-size:14px;color:var(--muted);margin-bottom:10px}
+.more .actions{padding:0;grid-template-columns:repeat(3,1fr)}
+.more .btn{min-height:56px;font-size:13px;background:linear-gradient(140deg,var(--purple),var(--orchid));color:#fff;box-shadow:none}
+.sets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sets span{font-family:var(--display);font-weight:600;font-size:13px;padding:4px 9px;border-radius:8px;background:var(--line)}
+.sets .w{color:var(--win)} .sets .l{color:var(--loss)}
+
+.tr{display:grid;grid-template-columns:26px 1fr 30px 30px 52px;gap:8px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);font-size:15px}
+.tr.th{border-top:0;font-size:12px;color:var(--muted);font-weight:600;padding-bottom:6px}
+.tr .pos{font-family:var(--display);font-weight:800;font-size:14px;color:var(--muted)}
+.tr .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr .c{text-align:center;color:var(--muted)}
+.tr .pt{text-align:right;font-family:var(--display);font-weight:800}
+.tr.th .pt{font-family:var(--body);font-weight:600}
+.tr.us{background:linear-gradient(90deg,var(--glow),transparent 80%)}
+.tr.us .nm,.tr.us .pos{font-weight:800;color:var(--text)}
+.upd{font-size:12px;color:var(--muted);padding:10px 16px 12px;border-top:1px solid var(--line)}
+footer{text-align:center;color:var(--muted);font-size:14px;margin-top:36px}
+footer b{font-family:var(--display);font-weight:800;color:var(--text)}
+
+.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}80%,100%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+@keyframes net{from{transform:translateY(-50%) scaleX(0)}to{transform:translateY(-50%) scaleX(1)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:360px){.more{padding-left:16px}.half{padding-left:22px;padding-right:22px}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <button class="brand" id="brand" aria-label="Purple">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5c-2.2 3.4-2.2 8.4 0 9.5s7.6 1.3 9.3-1.6M12 12c-2.3 1.4-6.4 6-6.2 8M12 12c3.9.4 6.6 3.4 7 6.5"/></svg>
+      </span>
+      <span><span class="wordmark">Purple</span><span class="season" style="display:block">Eccellenza maschile 2026/27</span></span>
+    </button>
+    <div class="played" id="played"></div>
+  </header>
+
+  <section class="court" id="hero" aria-live="polite"></section>
+
+  <div id="last"></div>
+
+  <h2 id="upTitle">Le prossime</h2>
+  <p class="sub" id="upSub">Scorri col dito</p>
+  <div class="strip" id="strip"></div>
+
+  <h2 id="tableTitle">Classifica</h2>
+  <div class="list table" id="table"></div>
+
+  <h2>Tutto il calendario</h2>
+  <div class="bar" aria-hidden="true"><i id="barFill" style="width:0"></i></div>
+  <div id="list"></div>
+
+  <footer><b>Forza Purple</b> 💜<br>Tocca una partita per mappa e calendario</footer>
+</main>
+
+<script>
+/* ===== Dati =====
+   data.json viene riscritto in automatico da GitHub Actions
+   leggendo il calendario ufficiale del campionato. */
+const TEAM = /purple/i;
+function fromData(json){
+  UPDATED = json.updated || "";
+  LEAGUE = (json.matches || []).map(x => ({...x, t: Date.parse(x.t)})).filter(x => !isNaN(x.t));
+  return LEAGUE.filter(x => TEAM.test(x.a) || TEAM.test(x.b)).sort((p,q) => p.t-q.t).map((x,i) => {
+    const home = TEAM.test(x.a), flip = s => home ? s : [s[1], s[0]];
+    return { i, g:x.g, opp: home ? x.b : x.a, home, venue:x.venue||"", city:x.city||"", q:x.q||"", note:x.note||"",
+      res: x.sets && x.sets.length ? x.sets.map(flip) : null,
+      score: x.score ? flip(x.score) : null, t:x.t };
+  });
+}
+async function loadMatches(){
+  try{
+    const r = await fetch("data.json?t="+Date.now(), {cache:"no-store"});
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    try{ localStorage.setItem("purple-data", JSON.stringify(j)); }catch(e){}
+    return fromData(j);
+  }catch(e){
+    try{ const c = JSON.parse(localStorage.getItem("purple-data") || "null"); if(c) return fromData(c); }catch(e){}
+    return [];
+  }
+}
+function scoreOf(m){
+  if(m.score && (m.score[0] || m.score[1])) return m.score;
+  if(m.res){ const w = m.res.filter(s => s[0]>s[1]).length; return [w, m.res.length-w]; }
+  return null;
+}
+function standings(){
+  const T = {}, add = n => T[n] || (T[n] = {n, pt:0, g:0, v:0, p:0, sv:0, sp:0, pf:0, ps:0});
+  LEAGUE.forEach(x => {
+    add(x.a); add(x.b);
+    const sc = scoreOf({score:x.score, res:x.sets && x.sets.length ? x.sets : null});
+    if(!sc) return;
+    const A = T[x.a], B = T[x.b];
+    A.g++; B.g++; A.sv += sc[0]; A.sp += sc[1]; B.sv += sc[1]; B.sp += sc[0];
+    (x.sets || []).forEach(s => { A.pf += s[0]; A.ps += s[1]; B.pf += s[1]; B.ps += s[0]; });
+    const W = sc[0] > sc[1] ? A : B, L = W === A ? B : A;
+    W.v++; L.p++;
+    if(Math.min(sc[0], sc[1]) === 2){ W.pt += 2; L.pt += 1; } else W.pt += 3;
+  });
+  const q = (a,b) => b ? a/b : (a ? 1e9 : 0);
+  return Object.values(T).sort((a,b) => b.pt-a.pt || b.v-a.v || q(b.sv,b.sp)-q(a.sv,a.sp) || q(b.pf,b.ps)-q(a.pf,a.ps) || a.n.localeCompare(b.n));
+}
+function renderTable(){
+  const box = $("#table"), others = LEAGUE.some(x => !TEAM.test(x.a) && !TEAM.test(x.b));
+  $("#tableTitle").hidden = box.hidden = !others;
+  if(!others) return;
+  const rows = standings();
+  box.innerHTML = `<div class="tr th"><span>#</span><span>Squadra</span><span class="c">G</span><span class="c">V</span><span class="pt">Punti</span></div>` +
+    rows.map((r,k) => `<div class="tr${TEAM.test(r.n) ? " us" : ""}"><span class="pos">${k+1}</span><span class="nm">${TEAM.test(r.n) ? "Purple" : r.n}</span><span class="c">${r.g}</span><span class="c">${r.v}</span><span class="pt">${r.pt}</span></div>`).join("") +
+    (UPDATED ? `<div class="upd">Aggiornata ${fmt(Date.parse(UPDATED),{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}</div>` : "");
+}
+
+/* ===== App ===== */
+const TZ = "Europe/Rome", DUR = 2*3600e3, enc = encodeURIComponent;
+let M = [], LEAGUE = [], UPDATED = "";
+const $ = s => document.querySelector(s);
+const fmt = (t,o) => new Intl.DateTimeFormat("it-IT",{timeZone:TZ,...o}).format(t);
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const wdShort = t => cap(fmt(t,{weekday:"short"}).replace(".",""));
+const wdLong = t => cap(fmt(t,{weekday:"long"}));
+const dayN = t => fmt(t,{day:"numeric"});
+const monS = t => fmt(t,{month:"short"}).replace(".","");
+const monL = t => fmt(t,{month:"long"});
+const hm = t => fmt(t,{hour:"2-digit",minute:"2-digit"});
+const ymd = t => new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(t);
+const dayDiff = (t,now) => Math.round((Date.parse(ymd(t))-Date.parse(ymd(now)))/864e5);
+const status = (m,now) => now < m.t ? "up" : now < m.t+DUR ? "live" : "done";
+const won = r => r.filter(s=>s[0]>s[1]).length;
+const placeText = m => m.home ? "In casa" : [m.venue,m.city].filter(Boolean).join(", ");
+const mapsQ = m => m.q;
+
+function rel(t,now){
+  const n = dayDiff(t,now);
+  if(n===0) return "Stasera si gioca";
+  if(n===1) return "Domani";
+  if(n<7) return `Tra ${n} giorni`;
+  if(n<14) return "Tra una settimana";
+  return `Tra ${Math.round(n/7)} settimane`;
+}
+function gcal(m){
+  const z = t => new Date(t).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+  const loc = m.q || (m.home ? "In casa" : placeText(m));
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    + "&text="+enc("🏐 Purple vs "+m.opp)
+    + "&dates="+z(m.t)+"/"+z(m.t+DUR)
+    + "&location="+enc(loc)
+    + "&details="+enc((m.note? m.note+"\n":"")+"Forza Purple 💜");
+}
+function wa(m){
+  const txt = `🏐 Purple vs ${m.opp}\n📅 ${wdLong(m.t)} ${dayN(m.t)} ${monL(m.t)}, ore ${hm(m.t)}\n📍 ${m.home ? "In casa" : placeText(m)}${m.note? "\n🔒 "+m.note:""}\n💜 Forza Purple!`;
+  return "https://wa.me/?text="+enc(txt);
+}
+const ICON = {
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.6A9 9 0 0 1 7.7 19.5L3 21l1.5-4.5A9 9 0 1 1 21 11.6z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>'
+};
+function actions(m, inHero){
+  const q = mapsQ(m), c = inHero ? "btn" : "btn";
+  return `<div class="actions">
+    ${q ? `<a class="${c}" href="https://www.google.com/maps/search/?api=1&query=${enc(q)}" target="_blank" rel="noopener">${ICON.pin}<span>Portami lì</span></a>` : ""}
+    <a class="${c}" href="${gcal(m)}" target="_blank" rel="noopener">${ICON.cal}<span>Calendario</span></a>
+    <a class="${c}${inHero?" ghost":""}" href="${wa(m)}" target="_blank" rel="noopener">${ICON.wa}<span>Manda nel gruppo</span></a>
+  </div>`;
+}
+
+let currentKey = "";
+function render(){
+  const now = Date.now();
+  const next = M.find(m => now < m.t+DUR);
+  const done = M.filter(m => status(m,now)==="done");
+  currentKey = next ? next.i+":"+status(next,now) : "end";
+
+  $("#played").innerHTML = `<b>${done.length}/${M.length}</b>giocate`;
+  requestAnimationFrame(()=> $("#barFill").style.width = (done.length/M.length*100)+"%");
+
+  // Hero
+  const hero = $("#hero");
+  if(!next){
+    hero.innerHTML = `<div class="half"><div class="team-us">Purple</div></div><div class="net"><span>fine stagione</span></div><div class="half them"><h1 class="team-them">Grazie a tutti, ci vediamo l’anno prossimo</h1></div>`;
+  } else {
+    const live = status(next,now)==="live";
+    hero.innerHTML = `
+      <div class="half">
+        <span class="rel"><i></i>${live ? "Si gioca adesso" : rel(next.t,now)}</span>
+        <div class="when">${wdLong(next.t)} ${dayN(next.t)} ${monL(next.t)}, ore ${hm(next.t)}</div>
+        <div class="team-us">Purple</div>
+      </div>
+      <div class="net" aria-hidden="true"><span>vs</span></div>
+      <div class="half them">
+        <h1 class="team-them">${next.opp}</h1>
+        <div class="where">
+          <span class="tag">${next.home ? "🏠 In casa" : "🚐 Trasferta"+(next.city?" a "+next.city:"")}</span>
+          ${!next.home && next.venue ? `<span class="tag">${next.venue}</span>` : ""}
+          ${next.note ? `<span class="tag warn">🔒 ${next.note}</span>` : ""}
+        </div>
+      </div>
+      ${live ? `<div class="live"><i></i>In campo ora</div>` :
+      `<div class="clock" role="timer" aria-label="Conto alla rovescia">
+        <div><b id="cd-d">0</b><small>giorni</small></div>
+        <div><b id="cd-h">0</b><small>ore</small></div>
+        <div><b id="cd-m">0</b><small>minuti</small></div>
+        <div><b id="cd-s">0</b><small>secondi</small></div>
+      </div>`}
+      ${actions(next,true)}`;
+  }
+
+  // Last result
+  const last = [...done].reverse().find(m => scoreOf(m));
+  $("#last").innerHTML = last ? (()=>{
+    const [w,l] = scoreOf(last), win = w>l;
+    return `<h2>${win ? "Ultima: vinta 🎉" : "Ultima partita"}</h2>
+      <div class="list"><details class="row" open><summary>
+        <div class="date"><b>${dayN(last.t)}</b><span>${monS(last.t)}</span></div>
+        <div class="info"><div class="o">Purple vs ${last.opp}</div><div class="w">${placeText(last)}</div></div>
+        <div class="score ${win?"w":"l"}">${w}–${l}</div></summary>
+        <div class="more"><div class="sets">${(last.res||[]).map(s=>`<span class="${s[0]>s[1]?"w":"l"}">${s[0]}–${s[1]}</span>`).join("")}</div></div>
+      </details></div>`;
+  })() : "";
+
+  // Strip
+  const ups = M.filter(m => now < m.t && m !== next);
+  $("#strip").innerHTML = ups.map(m => `
+    <a class="card" href="#p${m.i}" data-open="${m.i}">
+      <span class="pill ${m.home?"":"away"}">${m.home ? "In casa" : "Trasferta"}</span>
+      <div class="d"><b>${dayN(m.t)}</b><span>${monL(m.t)}<br>${wdShort(m.t)}, ${hm(m.t)}</span></div>
+      <div class="o">${m.opp}</div>
+      <div class="p">${placeText(m)}${m.note ? "<br>🔒 "+m.note : ""}</div>
+    </a>`).join("");
+  $("#upTitle").hidden = $("#upSub").hidden = $("#strip").hidden = !ups.length;
+
+  // Full list
+  let html = "", lastRound = "", lastMonth = "";
+  M.forEach(m => {
+    const round = (m.g || m.i+1) <= Math.ceil(M.length/2) ? "Andata" : "Ritorno";
+    const mk = ymd(m.t).slice(0,7);
+    if(round !== lastRound){ if(lastRound) html += "</div>"; html += `<div class="round">${round}</div><div class="list">`; lastRound = round; lastMonth = ""; }
+    if(mk !== lastMonth){ html += `<div class="month">${cap(monL(m.t))} ${fmt(m.t,{year:"numeric"})}</div>`; lastMonth = mk; }
+    const st = status(m,now);
+    let right;
+    const sc = scoreOf(m);
+    if(sc){ const [w,l] = sc; right = `<div class="score ${w>l?"w":"l"}">${w}–${l}</div>`; }
+    else if(st==="done") right = `<div class="tbd">Risultato<br>in arrivo</div>`;
+    else if(st==="live") right = `<div class="live-tag">Live</div>`;
+    else right = `<div class="time">${hm(m.t)}</div>`;
+    html += `<details class="row ${st}${next && m===next ? " next":""}" id="p${m.i}"><summary>
+        <div class="date"><b>${dayN(m.t)}</b><span>${wdShort(m.t)}</span></div>
+        <div class="info"><div class="o">${m.opp}</div><div class="w">${m.home ? "🏠 In casa" : "🚐 "+placeText(m)}${m.note ? "<br>🔒 "+m.note : ""}</div></div>
+        ${right}</summary>
+        <div class="more">
+          <div class="meta">${wdLong(m.t)} ${dayN(m.t)} ${monL(m.t)}, ore ${hm(m.t)}</div>
+          ${m.res ? `<div class="sets">${m.res.map(s=>`<span class="${s[0]>s[1]?"w":"l"}">${s[0]}–${s[1]}</span>`).join("")}</div>` : ""}
+          ${st!=="done" ? actions(m,false) : ""}
+        </div></details>`;
+  });
+  $("#list").innerHTML = html + "</div>";
+
+  renderTable();
+  tick();
+  return last;
+}
+
+function tick(){
+  const now = Date.now();
+  const next = M.find(m => now < m.t+DUR);
+  const key = next ? next.i+":"+status(next,now) : "end";
+  if(key !== currentKey){ render(); return; }
+  if(!next || now >= next.t) return;
+  let s = Math.floor((next.t-now)/1000);
+  const d = Math.floor(s/86400); s%=86400;
+  const h = Math.floor(s/3600); s%=3600;
+  const mi = Math.floor(s/60); s%=60;
+  const set = (id,v,p) => { const el = document.getElementById(id); if(el) el.textContent = p ? String(v).padStart(2,"0") : v; };
+  set("cd-d",d); set("cd-h",h,1); set("cd-m",mi,1); set("cd-s",s,1);
+}
+
+// Open a match from the strip
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-open]");
+  if(!a) return;
+  e.preventDefault();
+  const el = document.getElementById("p"+a.dataset.open);
+  if(el){ el.open = true; el.scrollIntoView({behavior:"smooth",block:"center"}); }
+});
+
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = document.createElement("canvas"); c.className = "confetti"; document.body.appendChild(c);
+  const x = c.getContext("2d"), r = devicePixelRatio || 1;
+  const W = c.width = innerWidth*r, H = c.height = innerHeight*r;
+  const cols = ["#8b3dff","#d65cff","#c9a8ff","#ffffff","#6a1fe0","#ff7ad9"];
+  const P = Array.from({length:170},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.3,vx:(Math.random()-.5)*18*r,vy:(-Math.random()*16-6)*r,
+    s:(Math.random()*7+5)*r,a:Math.random()*6,va:(Math.random()-.5)*.35,c:cols[Math.random()*cols.length|0]}));
+  let f = 0;
+  (function step(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{p.vy+=.38*r;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+      x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
+    if(++f < 200) requestAnimationFrame(step); else c.remove();
+  })();
+}
+$("#brand").addEventListener("click", confetti);
+
+loadMatches().then(list => {
+  M = list;
+  if(!M.length){ $("#hero").innerHTML = `<div class="half"><div class="team-us">Purple</div></div><div class="half them"><h1 class="team-them">Calendario non raggiungibile</h1><div class="when">Controlla la connessione e riapri la pagina.</div></div>`; return; }
+  const last = render();
+  setInterval(tick, 1000);
+  const sc = last && scoreOf(last);
+  if(sc && sc[0] > sc[1] && Date.now()-last.t < 4*864e5) setTimeout(confetti, 500);
+});
+// Ricarica i dati quando si torna sulla pagina
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState==="visible") loadMatches().then(list => { M = list; render(); });
+});
+</script>
+</body>
+</html>
