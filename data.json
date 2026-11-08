@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T14:00+01:00",
+ "updated": "2026-11-08T21:38+01:00",
  "matches": [
   {
    "g": 1,
@@ -159,6 +159,27 @@
    ]
   },
   {
+   "g": 11,
+   "n": 611155,
+   "t": "2026-11-10T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Maschile B Linnaeus",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 2,
+   "n": 611106,
+   "t": "2026-11-11T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "Polisport Nuncas",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
    "g": 2,
    "n": 611109,
    "t": "2026-11-11T21:15:00+01:00",
@@ -167,6 +188,36 @@
    "venue": "Via Nicolao Cena,2",
    "city": "Brandizzo",
    "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
+   "g": 2,
+   "n": 611107,
+   "t": "2026-11-12T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "PGS Pianezza",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 3,
+   "n": 611114,
+   "t": "2026-11-16T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "Kolbe",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
+   "g": 12,
+   "n": 611156,
+   "t": "2026-11-16T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
   },
   {
    "g": 3,
@@ -179,6 +230,57 @@
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
   },
   {
+   "g": 3,
+   "n": 611115,
+   "t": "2026-11-19T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Caselette Volley",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 3,
+   "n": 611113,
+   "t": "2026-11-20T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 4,
+   "n": 611117,
+   "t": "2026-11-22T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Polisport Nuncas",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 4,
+   "n": 611116,
+   "t": "2026-11-25T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "Caselette Volley",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
+   "g": 4,
+   "n": 611118,
+   "t": "2026-11-25T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "PGS Pianezza",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
    "g": 13,
    "n": 611165,
    "t": "2026-11-26T20:45:00+01:00",
@@ -187,6 +289,36 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 4,
+   "n": 611119,
+   "t": "2026-11-26T21:30:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "Icaro M1",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 5,
+   "n": 611123,
+   "t": "2026-11-30T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "Maschile B Linnaeus",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
+   "g": 14,
+   "n": 611169,
+   "t": "2026-12-02T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Polisport Nuncas",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
   },
   {
    "g": 5,
@@ -199,6 +331,36 @@
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
   },
   {
+   "g": 5,
+   "n": 611125,
+   "t": "2026-12-03T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "Kolbe",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 5,
+   "n": 611122,
+   "t": "2026-12-04T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 6,
+   "n": 611127,
+   "t": "2026-12-09T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Caselette Volley",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
    "g": 6,
    "n": 611130,
    "t": "2026-12-10T20:45:00+01:00",
@@ -207,6 +369,36 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 15,
+   "n": 611174,
+   "t": "2026-12-10T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
+   "g": 6,
+   "n": 611128,
+   "t": "2026-12-10T21:30:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "Polisport Nuncas",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 7,
+   "n": 611135,
+   "t": "2026-12-13T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
   },
   {
    "g": 7,
@@ -219,6 +411,68 @@
    "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
   },
   {
+   "g": 7,
+   "n": 611133,
+   "t": "2026-12-17T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 7,
+   "n": 611134,
+   "t": "2026-12-17T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "Maschile B Linnaeus",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 7,
+   "n": 611131,
+   "t": "2026-12-18T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "Kubo Volley",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 2,
+   "n": 611108,
+   "t": "2027-01-10T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Icaro M1",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 8,
+   "n": 611138,
+   "t": "2027-01-12T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Caselette Volley",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 8,
+   "n": 611136,
+   "t": "2027-01-13T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "Camaleonte Brandizzo",
+   "venue": "",
+   "city": "",
+   "q": ""
+  },
+  {
    "g": 8,
    "n": 611139,
    "t": "2027-01-14T20:45:00+01:00",
@@ -227,6 +481,67 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 8,
+   "n": 611137,
+   "t": "2027-01-14T21:30:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "Kolbe",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 8,
+   "n": 611140,
+   "t": "2027-01-15T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "PGS Pianezza",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 9,
+   "n": 611144,
+   "t": "2027-01-17T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 9,
+   "n": 611141,
+   "t": "2027-01-18T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "Kubo Volley",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
+   "g": 9,
+   "n": 611145,
+   "t": "2027-01-20T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Maschile B Linnaeus",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
+   "g": 9,
+   "n": 611142,
+   "t": "2027-01-21T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Icaro M1",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
   },
   {
    "g": 9,
@@ -249,6 +564,57 @@
    "q": "Pal. Aprica Via Bard, 39 Torino"
   },
   {
+   "g": 10,
+   "n": 611146,
+   "t": "2027-01-27T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "Maschile B Linnaeus",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
+   "g": 10,
+   "n": 611147,
+   "t": "2027-01-27T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
+   "g": 10,
+   "n": 611150,
+   "t": "2027-01-28T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "PGS Pianezza",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 1,
+   "n": 611104,
+   "t": "2027-01-29T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "Caselette Volley",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 11,
+   "n": 611152,
+   "t": "2027-02-01T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "Caselette Volley",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
    "g": 11,
    "n": 611154,
    "t": "2027-02-04T20:45:00+01:00",
@@ -257,6 +623,78 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 11,
+   "n": 611151,
+   "t": "2027-02-04T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Kubo Volley",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 2,
+   "n": 611110,
+   "t": "2027-02-04T21:30:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 11,
+   "n": 611153,
+   "t": "2027-02-09T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "Kolbe",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 12,
+   "n": 611159,
+   "t": "2027-02-14T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "PGS Pianezza",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 3,
+   "n": 611111,
+   "t": "2027-02-16T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Kubo Volley",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 12,
+   "n": 611158,
+   "t": "2027-02-17T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Icaro M1",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
+   "g": 12,
+   "n": 611160,
+   "t": "2027-02-18T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "Polisport Nuncas",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
   },
   {
    "g": 12,
@@ -269,11 +707,73 @@
    "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
   },
   {
+   "g": 13,
+   "n": 611163,
+   "t": "2027-02-22T21:00:00+01:00",
+   "a": "PGS Pianezza",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
    "g": 4,
    "n": 611120,
    "t": "2027-02-24T21:00:00+01:00",
    "a": "ASD Ecosportorino Dark",
    "b": "Ecosport Purple",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 13,
+   "n": 611162,
+   "t": "2027-02-25T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Kolbe",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 13,
+   "n": 611161,
+   "t": "2027-02-25T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "Kubo Volley",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 13,
+   "n": 611164,
+   "t": "2027-02-26T20:30:00+01:00",
+   "a": "Icaro M1",
+   "b": "Maschile B Linnaeus",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 14,
+   "n": 611170,
+   "t": "2027-02-28T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Caselette Volley",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 14,
+   "n": 611167,
+   "t": "2027-03-02T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Icaro M1",
    "venue": "Pal. Cecchi",
    "city": "Torino",
    "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
@@ -290,6 +790,69 @@
    "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
   },
   {
+   "g": 5,
+   "n": 611124,
+   "t": "2027-03-04T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 14,
+   "n": 611168,
+   "t": "2027-03-04T21:30:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "PGS Pianezza",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 15,
+   "n": 611171,
+   "t": "2027-03-07T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Kubo Volley",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 6,
+   "n": 611129,
+   "t": "2027-03-09T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "PGS Pianezza",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 15,
+   "n": 611173,
+   "t": "2027-03-11T21:00:00+01:00",
+   "a": "Polisport Nuncas",
+   "b": "Maschile B Linnaeus",
+   "venue": "Cecchi",
+   "city": "Torino",
+   "q": "Cecchi Via Cecchi 16, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 15,
+   "n": 611172,
+   "t": "2027-03-11T21:15:00+01:00",
+   "a": "Caselette Volley",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
    "g": 15,
    "n": 611175,
    "t": "2027-03-12T20:30:00+01:00",
@@ -301,6 +864,37 @@
   },
   {
    "g": 16,
+   "n": 611178,
+   "t": "2027-03-16T21:00:00+01:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Polisport Nuncas",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 16,
+   "n": 611176,
+   "t": "2027-03-17T21:00:00+01:00",
+   "a": "Kubo Volley",
+   "b": "Icaro M1",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
+   "g": 16,
+   "n": 611180,
+   "t": "2027-03-17T21:15:00+01:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Kolbe",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
+  },
+  {
+   "g": 16,
    "n": 611177,
    "t": "2027-03-18T20:45:00+01:00",
    "a": "Ecosport Purple",
@@ -308,6 +902,36 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 16,
+   "n": 611179,
+   "t": "2027-03-18T21:15:00+01:00",
+   "a": "Maschile B Linnaeus",
+   "b": "Caselette Volley",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 17,
+   "n": 611182,
+   "t": "2027-03-21T18:00:00+01:00",
+   "a": "Kolbe",
+   "b": "Maschile B Linnaeus",
+   "venue": "Pal. Aprica",
+   "city": "Torino",
+   "q": "Pal. Aprica Via Bard, 39 Torino"
+  },
+  {
+   "g": 17,
+   "n": 611181,
+   "t": "2027-03-31T21:15:00+02:00",
+   "a": "Camaleonte Brandizzo",
+   "b": "Kubo Volley",
+   "venue": "Via Nicolao Cena,2",
+   "city": "Brandizzo",
+   "q": "via Nicolao Cena,2 Brandizzo"
   },
   {
    "g": 17,
@@ -321,6 +945,47 @@
    "note": "Ammessi solo tesserati"
   },
   {
+   "g": 17,
+   "n": 611185,
+   "t": "2027-04-01T21:00:00+02:00",
+   "a": "PGS Pianezza",
+   "b": "Icaro M1",
+   "venue": "Pal. Papa Giovanni XXIII",
+   "city": "Pianezza",
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+  },
+  {
+   "g": 17,
+   "n": 611183,
+   "t": "2027-04-01T21:15:00+02:00",
+   "a": "Caselette Volley",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Istituto Comprensivo",
+   "city": "Caselette",
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+  },
+  {
+   "g": 18,
+   "n": 611189,
+   "t": "2027-04-06T21:00:00+02:00",
+   "a": "ASD Ecosportorino Dark",
+   "b": "Kolbe",
+   "venue": "Pal. Cecchi",
+   "city": "Torino",
+   "q": "Pal. Cecchi - Via A. Cecchi, 14, Torino",
+   "note": "Ammessi solo tesserati"
+  },
+  {
+   "g": 18,
+   "n": 611186,
+   "t": "2027-04-07T21:00:00+02:00",
+   "a": "Kubo Volley",
+   "b": "PGS Pianezza",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
    "g": 18,
    "n": 611188,
    "t": "2027-04-08T20:45:00+02:00",
@@ -329,6 +994,36 @@
    "venue": "Scuola Vivaldi",
    "city": "Torino",
    "q": "Scuola Vivaldi - Via Casteldelfino, 24, Torino"
+  },
+  {
+   "g": 18,
+   "n": 611190,
+   "t": "2027-04-08T21:30:00+02:00",
+   "a": "Maschile B Linnaeus",
+   "b": "Camaleonte Brandizzo",
+   "venue": "Pal.Comunale",
+   "city": "Borgone di Susa",
+   "q": "Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"
+  },
+  {
+   "g": 18,
+   "n": 611187,
+   "t": "2027-04-09T20:30:00+02:00",
+   "a": "Icaro M1",
+   "b": "Polisport Nuncas",
+   "venue": "Impianto Sportivo Luini",
+   "city": "Torino",
+   "q": "Impianto Sportivo Luini , Via luini 170, Torino"
+  },
+  {
+   "g": 6,
+   "n": 611126,
+   "t": "2027-04-12T21:00:00+02:00",
+   "a": "Kubo Volley",
+   "b": "Kolbe",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
   }
  ]
 }
