@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11T10:44+01:00",
+ "updated": "2026-11-12T01:15+01:00",
  "matches": [
   {
    "g": 1,
@@ -195,17 +195,25 @@
    "b": "Polisport Nuncas",
    "venue": "Palestra Palazzeschi",
    "city": "Torino",
-   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
-  },
-  {
-   "g": 2,
-   "n": 611109,
-   "t": "2026-11-11T21:15:00+01:00",
-   "a": "Camaleonte Brandizzo",
-   "b": "Ecosport Purple",
-   "venue": "Via Nicolao Cena,2",
-   "city": "Brandizzo",
-   "q": "via Nicolao Cena,2 Brandizzo"
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino",
+   "score": [
+    0,
+    3
+   ],
+   "sets": [
+    [
+     17,
+     25
+    ],
+    [
+     16,
+     25
+    ],
+    [
+     16,
+     25
+    ]
+   ]
   },
   {
    "g": 2,
