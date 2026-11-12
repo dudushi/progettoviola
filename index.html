@@ -80,6 +80,8 @@ tbody tr.sel td{background:var(--sel);color:var(--sel-text)!important;border-col
 tbody tr.sel th{background:#4a1c86;color:#fff}
 @media (hover:hover){#cal tbody tr:not(.sel):hover td{background:#f1ebfb}}
 #cal tbody tr:not(.sel):active td{background:#ece4f8}
+tr.tbd td{color:#9a6a00;font-style:italic}
+td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
 #cl tr.us td{background:var(--sel);color:#fff;font-weight:bold;border-color:#7f4fc4}
 #cl tr.us th{background:#4a1c86;color:#fff}
 #cl tr.riv td.nm::after{content:" !";color:var(--red);font-weight:bold}
@@ -140,7 +142,7 @@ tbody tr.sel th{background:#4a1c86;color:#fff}
 
 <script>
 const TEAM = /purple/i, RIVALS = ["Kolbe","Icaro M1"], DUR = 2*3600e3;
-const SNAPSHOT = {"updated":"2026-11-08T14:00+01:00","matches":[{"g":1,"n":611105,"t":"2026-11-02T21:00:00+01:00","a":"PGS Pianezza","b":"Polisport Nuncas","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza","score":[3,0],"sets":[[25,20],[25,17],[25,19]]},{"g":1,"n":611102,"t":"2026-11-03T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Camaleonte Brandizzo","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati","score":[3,2],"sets":[[25,10],[24,26],[25,23],[25,18],[15,12]]},{"g":1,"n":611103,"t":"2026-11-05T20:45:00+01:00","a":"Ecosport Purple","b":"Kolbe","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino","score":[2,3],"sets":[[25,22],[17,25],[16,25],[25,22],[14,16]]},{"g":10,"n":611149,"t":"2026-11-05T21:15:00+01:00","a":"Caselette Volley","b":"Icaro M1","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette","score":[0,3],"sets":[[19,25],[19,25],[19,25]]},{"g":1,"n":611101,"t":"2026-11-05T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Kubo Volley","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa","score":[3,0],"sets":[[25,16],[25,18],[25,21]]},{"g":2,"n":611109,"t":"2026-11-11T21:15:00+01:00","a":"Camaleonte Brandizzo","b":"Ecosport Purple","venue":"Via Nicolao Cena,2","city":"Brandizzo","q":"via Nicolao Cena,2 Brandizzo"},{"g":3,"n":611112,"t":"2026-11-19T20:45:00+01:00","a":"Ecosport Purple","b":"Maschile B Linnaeus","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":13,"n":611165,"t":"2026-11-26T20:45:00+01:00","a":"Ecosport Purple","b":"ASD Ecosportorino Dark","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":5,"n":611121,"t":"2026-12-03T20:45:00+01:00","a":"Ecosport Purple","b":"Kubo Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":6,"n":611130,"t":"2026-12-10T20:45:00+01:00","a":"Ecosport Purple","b":"Icaro M1","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":7,"n":611132,"t":"2026-12-14T21:00:00+01:00","a":"PGS Pianezza","b":"Ecosport Purple","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"},{"g":8,"n":611139,"t":"2027-01-14T20:45:00+01:00","a":"Ecosport Purple","b":"Polisport Nuncas","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":9,"n":611143,"t":"2027-01-21T21:15:00+01:00","a":"Caselette Volley","b":"Ecosport Purple","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette"},{"g":10,"n":611148,"t":"2027-01-24T18:00:00+01:00","a":"Kolbe","b":"Ecosport Purple","venue":"Pal. Aprica","city":"Torino","q":"Pal. Aprica Via Bard, 39 Torino"},{"g":11,"n":611154,"t":"2027-02-04T20:45:00+01:00","a":"Ecosport Purple","b":"Camaleonte Brandizzo","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":12,"n":611157,"t":"2027-02-18T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Ecosport Purple","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"},{"g":4,"n":611120,"t":"2027-02-24T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Ecosport Purple","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati"},{"g":14,"n":611166,"t":"2027-03-03T21:00:00+01:00","a":"Kubo Volley","b":"Ecosport Purple","venue":"Palestra Palazzeschi","city":"Torino","q":"Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"},{"g":15,"n":611175,"t":"2027-03-12T20:30:00+01:00","a":"Icaro M1","b":"Ecosport Purple","venue":"Impianto Sportivo Luini","city":"Torino","q":"Impianto Sportivo Luini , Via luini 170, Torino"},{"g":16,"n":611177,"t":"2027-03-18T20:45:00+01:00","a":"Ecosport Purple","b":"PGS Pianezza","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":17,"n":611184,"t":"2027-04-01T21:00:00+02:00","a":"Polisport Nuncas","b":"Ecosport Purple","venue":"Cecchi","city":"Torino","q":"Cecchi Via Cecchi 16, Torino","note":"Ammessi solo tesserati"},{"g":18,"n":611188,"t":"2027-04-08T20:45:00+02:00","a":"Ecosport Purple","b":"Caselette Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"}]};
+const SNAPSHOT = {"updated":"2026-11-12T10:00+01:00","matches":[{"g":1,"n":611105,"t":"2026-11-02T21:00:00+01:00","a":"PGS Pianezza","b":"Polisport Nuncas","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza","score":[3,0],"sets":[[25,20],[25,17],[25,19]]},{"g":1,"n":611102,"t":"2026-11-03T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Camaleonte Brandizzo","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati","score":[3,2],"sets":[[25,10],[24,26],[25,23],[25,18],[15,12]]},{"g":1,"n":611103,"t":"2026-11-05T20:45:00+01:00","a":"Ecosport Purple","b":"Kolbe","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino","score":[2,3],"sets":[[25,22],[17,25],[16,25],[25,22],[14,16]]},{"g":10,"n":611149,"t":"2026-11-05T21:15:00+01:00","a":"Caselette Volley","b":"Icaro M1","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette","score":[0,3],"sets":[[19,25],[19,25],[19,25]]},{"g":1,"n":611101,"t":"2026-11-05T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Kubo Volley","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa","score":[3,0],"sets":[[25,16],[25,18],[25,21]]},{"g":11,"n":611155,"t":"2026-11-10T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Maschile B Linnaeus","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati","score":[0,3],"sets":[[11,25],[19,25],[22,25]]},{"g":2,"n":611106,"t":"2026-11-11T21:00:00+01:00","a":"Kubo Volley","b":"Polisport Nuncas","venue":"Palestra Palazzeschi","city":"Torino","q":"Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino","score":[0,3],"sets":[[17,25],[16,25],[16,25]]},{"g":3,"n":611112,"t":"2026-11-19T20:45:00+01:00","a":"Ecosport Purple","b":"Maschile B Linnaeus","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":13,"n":611165,"t":"2026-11-26T20:45:00+01:00","a":"Ecosport Purple","b":"ASD Ecosportorino Dark","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":5,"n":611121,"t":"2026-12-03T20:45:00+01:00","a":"Ecosport Purple","b":"Kubo Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":6,"n":611130,"t":"2026-12-10T20:45:00+01:00","a":"Ecosport Purple","b":"Icaro M1","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":7,"n":611132,"t":"2026-12-14T21:00:00+01:00","a":"PGS Pianezza","b":"Ecosport Purple","venue":"Pal. Papa Giovanni XXIII","city":"Pianezza","q":"Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"},{"g":8,"n":611139,"t":"2027-01-14T20:45:00+01:00","a":"Ecosport Purple","b":"Polisport Nuncas","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":9,"n":611143,"t":"2027-01-21T21:15:00+01:00","a":"Caselette Volley","b":"Ecosport Purple","venue":"Istituto Comprensivo","city":"Caselette","q":"Istituto Comprensivo - Strada Contessa, 90 - Caselette"},{"g":10,"n":611148,"t":"2027-01-24T18:00:00+01:00","a":"Kolbe","b":"Ecosport Purple","venue":"Pal. Aprica","city":"Torino","q":"Pal. Aprica Via Bard, 39 Torino"},{"g":11,"n":611154,"t":"2027-02-04T20:45:00+01:00","a":"Ecosport Purple","b":"Camaleonte Brandizzo","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":12,"n":611157,"t":"2027-02-18T21:30:00+01:00","a":"Maschile B Linnaeus","b":"Ecosport Purple","venue":"Pal.Comunale","city":"Borgone di Susa","q":"Pal.Comunale - Via Bobba Guido, 41 - Borgone di Susa"},{"g":4,"n":611120,"t":"2027-02-24T21:00:00+01:00","a":"ASD Ecosportorino Dark","b":"Ecosport Purple","venue":"Pal. Cecchi","city":"Torino","q":"Pal. Cecchi - Via A. Cecchi, 14, Torino","note":"Ammessi solo tesserati"},{"g":14,"n":611166,"t":"2027-03-03T21:00:00+01:00","a":"Kubo Volley","b":"Ecosport Purple","venue":"Palestra Palazzeschi","city":"Torino","q":"Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"},{"g":15,"n":611175,"t":"2027-03-12T20:30:00+01:00","a":"Icaro M1","b":"Ecosport Purple","venue":"Impianto Sportivo Luini","city":"Torino","q":"Impianto Sportivo Luini , Via luini 170, Torino"},{"g":16,"n":611177,"t":"2027-03-18T20:45:00+01:00","a":"Ecosport Purple","b":"PGS Pianezza","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":17,"n":611184,"t":"2027-04-01T21:00:00+02:00","a":"Polisport Nuncas","b":"Ecosport Purple","venue":"Cecchi","city":"Torino","q":"Cecchi Via Cecchi 16, Torino","note":"Ammessi solo tesserati"},{"g":18,"n":611188,"t":"2027-04-08T20:45:00+02:00","a":"Ecosport Purple","b":"Caselette Volley","venue":"Scuola Vivaldi","city":"Torino","q":"Scuola Vivaldi - Via Casteldelfino, 24, Torino"},{"g":2,"n":611109,"t":null,"a":"Camaleonte Brandizzo","b":"Ecosport Purple","venue":"Via Nicolao Cena,2","city":"Brandizzo","q":"via Nicolao Cena,2 Brandizzo","postponed":true,"note":"Rinvio per chiusura straordinaria scuola"}]};
 const $ = s => document.querySelector(s);
 const enc = encodeURIComponent;
 const fmt = (t,o) => new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",...o}).format(t);
@@ -153,12 +155,19 @@ function scoreOf(x){
 }
 function use(json){
   UPDATED = json.updated || "";
-  LEAGUE = (json.matches || []).map(x => ({...x, t: Date.parse(x.t)})).filter(x => !isNaN(x.t));
-  M = LEAGUE.filter(x => TEAM.test(x.a) || TEAM.test(x.b)).sort((p,q) => p.t-q.t).map(x => {
-    const home = TEAM.test(x.a), flip = s => home ? s : [s[1], s[0]], sc = scoreOf(x);
-    return { t:x.t, home, opp: home ? x.b : x.a, venue:x.venue||"", city:x.city||"", q:x.q||"", note:x.note||"",
-      sets:(x.sets||[]).map(flip), score: sc ? flip(sc) : null };
+  const MIN_T = Date.UTC(2020,0,1);
+  LEAGUE = (Array.isArray(json.matches) ? json.matches : []).filter(x => x && x.a && x.b).map(x => {
+    let t = x.t ? Date.parse(x.t) : NaN;
+    const bad = isNaN(t) || t < MIN_T;          // data mancante o finta: partita da definire
+    return {...x, t: bad ? null : t, postponed: !!x.postponed || (bad && !scoreOf(x))};
   });
+  M = LEAGUE.filter(x => TEAM.test(x.a) || TEAM.test(x.b))
+    .sort((p,q) => (p.t===null) - (q.t===null) || (p.t||0) - (q.t||0))
+    .map(x => {
+      const home = TEAM.test(x.a), flip = s => home ? s : [s[1], s[0]], sc = scoreOf(x);
+      return { t:x.t, home, opp: home ? x.b : x.a, venue:x.venue||"", city:x.city||"", q:x.q||"", note:x.note||"",
+        postponed:x.postponed, sets:(x.sets||[]).map(flip), score: sc ? flip(sc) : null };
+    });
 }
 function standings(){
   const T = {}, add = n => T[n] || (T[n] = {n, pt:0, g:0, v:0, p:0, sv:0, sp:0, pf:0, ps:0});
@@ -189,17 +198,17 @@ function render(){
   }).join("");
 
   // calendar
-  const nextI = M.findIndex(m => now < m.t + DUR);
+  const nextI = M.findIndex(m => m.t !== null && now < m.t + DUR);
   if(selected < 0) selected = nextI >= 0 ? nextI : M.length-1;
   $("#rows").innerHTML = M.map((m,i) => {
-    const done = now >= m.t + DUR, sc = m.score;
-    return `<tr data-i="${i}" class="${done?"past":""}${i===selected?" sel":""}">
+    const tbd = m.t === null, done = !tbd && now >= m.t + DUR, sc = m.score;
+    return `<tr data-i="${i}" class="${done?"past":""}${tbd?" tbd":""}${i===selected?" sel":""}">
       <th>${i+1}</th>
-      <td class="num">${fmt(m.t,{day:"2-digit",month:"2-digit"})}</td>
-      <td class="num">${fmt(m.t,{hour:"2-digit",minute:"2-digit"})}</td>
+      <td class="num">${tbd ? "—" : fmt(m.t,{day:"2-digit",month:"2-digit"})}</td>
+      <td class="num">${tbd ? "—" : fmt(m.t,{hour:"2-digit",minute:"2-digit"})}</td>
       <td>${m.opp}</td>
       <td class="c">${m.home?"C":"F"}</td>
-      <td class="c res${sc ? (sc[0]>sc[1]?" w":" l") : ""}">${sc ? sc[0]+"-"+sc[1] : (done ? "?" : "")}</td>
+      <td class="c res${sc ? (sc[0]>sc[1]?" w":" l") : ""}">${sc ? sc[0]+"-"+sc[1] : (m.postponed ? "rinv." : done ? "?" : "")}</td>
     </tr>`;
   }).join("");
   status();
@@ -215,13 +224,14 @@ function status(){
   const m = M[selected];
   if(!m){ $("#status").innerHTML = '<div class="in"><div class="txt">Ready</div></div>'; return; }
   const z = t => new Date(t).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
-  const cal = "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+enc("🏐 Purple vs "+m.opp)+"&dates="+z(m.t)+"/"+z(m.t+DUR)+"&location="+enc(m.q);
-  const when = fmt(m.t,{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"") + ", " + fmt(m.t,{hour:"2-digit",minute:"2-digit"});
+  const tbd = m.t === null;
+  const cal = tbd ? "" : "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+enc("🏐 Purple vs "+m.opp)+"&dates="+z(m.t)+"/"+z(m.t+DUR)+"&location="+enc(m.q);
+  const when = tbd ? "Rinviata, data da definire" : fmt(m.t,{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"") + ", " + fmt(m.t,{hour:"2-digit",minute:"2-digit"});
   const sets = m.sets.length ? m.sets.map(s => s.join("-")).join("  ") : "";
   const l2 = sets || ((m.home ? "In casa, " + m.venue : m.venue + ", " + m.city) + (m.note ? " · " + m.note : ""));
   $("#status").innerHTML = `<div class="in"><div class="txt"><div class="l1">${when} · ${m.opp}</div><div class="l2">${l2}</div></div>`
     + (m.q ? `<a href="https://maps.apple.com/?q=${enc(m.q)}" target="_blank" rel="noopener">Mappa</a>` : "")
-    + (Date.now() < m.t ? `<a href="${cal}" target="_blank" rel="noopener">+ Cal</a>` : "")
+    + (!tbd && Date.now() < m.t ? `<a href="${cal}" target="_blank" rel="noopener">+ Cal</a>` : "")
     + `</div>`;
 }
 $("#rows").addEventListener("click", e => {
@@ -236,6 +246,7 @@ async function load(){
     const r = await fetch("data.json?t="+Date.now(), {cache:"no-store"});
     if(!r.ok) throw 0;
     const j = await r.json();
+    if(!j || !Array.isArray(j.matches) || j.matches.length < 10) throw 0;   // dati rotti: usa l’ultima copia buona
     try{ localStorage.setItem("purple-data", JSON.stringify(j)); }catch(e){}
     return j;
   }catch(e){
@@ -243,9 +254,13 @@ async function load(){
     return SNAPSHOT;
   }
 }
-use(SNAPSHOT); render();
-load().then(j => { use(j); render(); });
-document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") load().then(j => { use(j); render(); }); });
+function show(j){
+  try{ use(j); render(); }
+  catch(e){ console.error(e); if(j !== SNAPSHOT){ use(SNAPSHOT); render(); } }
+}
+show(SNAPSHOT);
+load().then(show);
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") load().then(show); });
 </script>
 </body>
 </html>
