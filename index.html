@@ -148,6 +148,11 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
 .gelbtn::before{content:"";position:absolute;left:6px;right:6px;top:2px;height:46%;border-radius:999px;background:linear-gradient(rgba(255,255,255,.65),rgba(255,255,255,.08))}
 .gelbtn:active{filter:brightness(.92)}
 @media (prefers-reduced-motion: reduce){ .pl,.ball{transition:none} }
+.rally-wrap{border:1px solid #7d6ea0;box-shadow:inset 1px 1px 0 #6b5a8e;background:#f3ecff;line-height:0}
+#rally{width:100%;height:auto;aspect-ratio:16/9;display:block;image-rendering:pixelated;image-rendering:crisp-edges;
+  touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;cursor:pointer}
+.rally-tip{margin:6px 0 16px;font:11px var(--ui);color:#6a5a86}
+.rally-tip b{color:var(--sel)}
 .roster{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:10px 6px 12px;
   border:1px solid #7d6ea0;box-shadow:inset 1px 1px 0 #6b5a8e;
   background:repeating-conic-gradient(#f4effb 0 25%,#ffffff 0 50%) 0 0/16px 16px}
@@ -190,6 +195,10 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
     <div class="shots" id="shots"></div>
   </div>
   <div class="shufrow"><button class="gelbtn ghost" id="replay" type="button">↺ Rigioca</button><button class="gelbtn" id="shuffle" type="button">⟳ Shuffle</button></div>
+
+  <p class="cmd">&gt;&gt; <i>gioca</i>('purple rally')</p>
+  <div class="rally-wrap"><canvas id="rally" aria-label="Purple Rally: tieni premuto per caricare, lascia per saltare e colpire"></canvas></div>
+  <p class="rally-tip" id="rallyTip"></p>
 
   <p class="cmd">&gt;&gt; <i>classifica</i>('eccellenza A')</p>
   <div class="grid">
@@ -728,6 +737,233 @@ const Game = (() => {
   $s("replay").addEventListener("click", () => start(false));
   size(); start(true);
   return {start};
+})();
+
+/* ===== Purple Rally: gioco originale one-touch per iPhone ===== */
+const Rally = (() => {
+  const cv = document.getElementById("rally"); if(!cv) return null;
+  const c = cv.getContext("2d"), LW = 320, LH = 180;
+  cv.width = LW; cv.height = LH;
+  const tipEl = document.getElementById("rallyTip");
+  Object.assign(PX, {"!":"010010010000010", ":":"000010000010000", ".":"000000000000010", "-":"000000111000000", "/":"001001010100100", "’":"010010000000000", "'":"010010000000000"});
+  const GROUND = 160, NETX = 160, NETTOP = 104, ATK = 107;   // ATK = linea dei 3 m del nostro campo
+  const LV = [
+    {t:"Ricezione a W", tip:"In 5 in ricezione: battute lente, prendi il ritmo.", serveT:1.5, xr:[50,120], blk:1, opp:.55},
+    {t:"Ricezione a 3", tip:"Meno ricevitori, battuta più veloce.", serveT:1.25, xr:[45,125], blk:1, opp:.6},
+    {t:"Ricezione a 2", tip:"Mezzo campo a testa: corri di più.", serveT:1.25, xr:[25,140], blk:2, opp:.6},
+    {t:"Seconda intenzione", tip:"Il muro non ti aspetta: zero muri, ma difesa sveglia.", serveT:1.2, xr:[60,130], blk:0, opp:.75},
+    {t:"Alza il libero", tip:"Alzata da dietro i 3 m: colpisci più lontano dalla rete.", serveT:1.2, xr:[35,95], blk:2, opp:.65},
+    {t:"Pipe", tip:"Seconda linea: devi staccare dietro la linea dei 3 m, o è fallo.", serveT:1.2, xr:[30,100], blk:2, opp:.65, pipe:true},
+    {t:"Primo tempo", tip:"Palla veloce: tieni premuto poco e colpisci presto.", serveT:.95, xr:[70,140], blk:1, opp:.7},
+    {t:"Muro a 3", tip:"Muro altissimo: salta tanto o fai un pallonetto.", serveT:1.2, xr:[50,130], blk:3, opp:.7},
+    {t:"Free ball", tip:"Palla facile e alta: nessuna scusa.", serveT:1.8, xr:[50,120], blk:2, opp:.75},
+    {t:"Rigiocata e copertura", tip:"Se ti murano, a volte la copertura salva la palla.", serveT:1.15, xr:[45,130], blk:3, opp:.75, cover:true}
+  ];
+  const G = 260, R = 3.5;
+  let me, them, ball, state, score, best = 0, hearts, lvl, loop, msg, msgT, hold, holdT, parts = [], ray = null, running = false, last = 0, audio = null;
+  try{ best = +localStorage.getItem("purple-rally-best") || 0; }catch(e){}
+  const kitImg = n => { const k = kitCanvas(n, 1); return k; };
+  function pickPlayers(){
+    const nums = ROSA.map(r => r[1]).filter(n => !LIBERO.has(n));
+    const a = nums[Math.floor(Math.random()*nums.length)];
+    let b = a; while(b === a) b = nums[Math.floor(Math.random()*nums.length)];
+    return [a,b];
+  }
+  function reset(){
+    const [a,b] = pickPlayers();
+    me = {n:a, x:70, y:GROUND, vy:0, air:false, img:kitImg(a)};
+    them = {n:b, x:250, y:GROUND, img:kitImg(b), arms:0};
+    score = 0; hearts = 3; lvl = 0; loop = 0; hold = false; holdT = 0; parts = [];
+    setTip(); serve(); state = "play";
+  }
+  const L = () => LV[lvl];
+  const speed = () => 1 + loop * .15;
+  function setTip(){ if(tipEl) tipEl.innerHTML = `<b>${lvl+1}/10 · ${L().t}</b> ${L().tip}`; }
+  function launch(x0,y0,x1,T){ ball = {x:x0, y:y0, vx:(x1-x0)/T, vy:(GROUND - R - y0 - .5*G*T*T)/T, side: x1 < NETX ? "me" : "them", hit:false}; }
+  function serve(){
+    const l = L(); const xl = l.xr[0] + Math.random()*(l.xr[1]-l.xr[0]);
+    launch(300, 70, xl, l.serveT / speed());
+    if(l.t === "Free ball") ball.vy -= 30;
+    them.x = 280; ray = null; setTimeout(() => { them.home = true; }, 400);
+  }
+  function say(t, col){ msg = {t, col}; msgT = 1.3; }
+  function burst(x,y,col){ for(let i=0;i<10;i++) parts.push({x,y,vx:(Math.random()-.5)*120,vy:-Math.random()*120,t:.5,col}); }
+  function beep(f, d){
+    try{
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = "square"; o.frequency.value = f;
+      g.gain.setValueAtTime(.04, audio.currentTime); g.gain.exponentialRampToValueAtTime(.0001, audio.currentTime + d);
+      o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime + d);
+    }catch(e){}
+  }
+  const landX = b => { // dove atterra la palla
+    const a = .5*G, bb = b.vy, cc = b.y - (GROUND - R), d = bb*bb - 4*a*cc;
+    const t = d > 0 ? Math.max(0, (-bb + Math.sqrt(d)) / (2*a)) : 0;
+    return {x: b.x + b.vx*t, t};
+  };
+  const crossX = (b, yh) => {  // dove la palla scende all'altezza yh
+    const a = .5*G, d = b.vy*b.vy - 4*a*(b.y - yh);
+    if(d < 0) return landX(b).x;
+    const t = (-b.vy + Math.sqrt(d)) / (2*a); return t > 0 ? b.x + b.vx*t : landX(b).x;
+  };
+  const blockTop = () => NETTOP - [0, 8, 14, 20][L().blk];
+  function point(win, text){
+    if(win){ score++; say(text || "PUNTO!", "#1d7a12"); beep(880,.15);
+      if(score % 3 === 0){ lvl++; if(lvl >= LV.length){ lvl = 0; loop++; say("GIRO "+(loop+1)+"!", "#6a2fb5"); } setTip(); }
+    } else { hearts--; say(text || "NO!", "#d81e4a"); beep(160,.25);
+      if(hearts <= 0){ state = "over"; if(score > best){ best = score; try{ localStorage.setItem("purple-rally-best", best); }catch(e){} } return; }
+    }
+    state = "pause"; setTimeout(() => { if(state === "pause"){ serve(); state = "play"; } }, 900);
+  }
+  function hit(){
+    const hx = me.x + 7, hy = me.y - 34;              // la mano
+    if(!ball || ball.side !== "me" || Math.hypot(ball.x - hx, ball.y - hy) > 18) return false;
+    if(L().pipe && me.x + 8 > ATK){ point(false, "FALLO 3 M!"); return true; }
+    const x0 = ball.x, y0 = ball.y;
+    let kind;
+    if(me.shot < .2){                                   // tocco breve: pallonetto sopra il muro
+      kind = "PALLONETTO"; launch(x0, y0, 192 + Math.random()*25, 1.0);
+    } else {                                            // tenuto: schiacciata che passa la rete poco sopra il punto d'impatto
+      kind = "SCHIACCIATA";
+      const yn = y0 + 3, nx = NETX + 8, xt = 205 + Math.random()*95; let vx = 380 * Math.sqrt(speed()), vy = 0, land = 999;
+      for(; vx > 140; vx -= 20){
+        const t1 = (nx - x0) / vx; vy = (yn - y0 - .5*G*t1*t1) / t1;
+        const a = .5*G, cc = y0 - (GROUND - R), t = (-vy + Math.sqrt(vy*vy - 4*a*cc)) / (2*a);
+        land = x0 + vx*t; if(land <= xt) break;
+      }
+      ball = {x:x0, y:y0, vx, vy, side:"them", hit:true};
+      ball.blocked = yn > NETTOP - 1 || (L().blk > 0 && yn > blockTop() && Math.random() < .35 + .15*L().blk);
+      if(!ball.blocked && L().blk > 0 && yn > blockTop()) kind = "TOCCO DEL MURO";
+    }
+    ball.side = "them"; ball.kind = kind;
+    burst(x0, y0, "#fff38a"); beep(520,.08); say(kind, "#4a1c86");
+    return true;
+  }
+  function step(dt){
+    if(state === "play" || state === "pause"){
+      // il nostro giocatore insegue la palla
+      if(ball && ball.side === "me" && state === "play"){
+        const lx = Math.max(10, Math.min(146, crossX(ball, GROUND - 70) - 7));
+        const tx = L().pipe ? Math.min(lx, ATK - 14) : lx;
+        me.x += Math.max(-130*dt, Math.min(130*dt, tx - me.x));
+      } else if(!me.air) me.x += Math.max(-80*dt, Math.min(80*dt, 70 - me.x));
+      if(hold && !me.air) holdT = Math.min(.6, holdT + dt);
+      if(me.air){ me.vy += G*dt; me.y += me.vy*dt; if(me.y >= GROUND){ me.y = GROUND; me.air = false; me.vy = 0; } }
+      // avversario
+      if(ball && ball.side === "them" && !ball.blocked){
+        const lx = Math.min(310, Math.max(172, landX(ball).x));
+        if(isFinite(lx)) them.x += Math.max(-150*L().opp*speed()*dt, Math.min(150*L().opp*speed()*dt, lx - them.x));
+      }
+      if(ball && ball.side !== "them") them.x += Math.max(-90*dt, Math.min(90*dt, 245 - them.x));
+      if(!isFinite(them.x)) them.x = 245;
+      them.arms = ball && ball.x > 120 && ball.x < 200 ? 1 : 0;
+      if(ball && state === "play"){
+        ball.vy += G*dt; ball.x += ball.vx*dt; ball.y += ball.vy*dt;
+        if(me.air && hit()) {}
+        if(ball.side === "them" && ball.blocked && ball.x > NETX + 4){
+          ball.blocked = false; burst(NETX+8, ball.y, "#d81e4a");
+          if(L().cover && Math.random() < .5){ launch(NETX - 4, ball.y, 60 + Math.random()*50, 1.2); ball.side = "me"; say("COPERTURA!", "#6a2fb5"); }
+          else { launch(NETX - 4, ball.y, 110 + Math.random()*40, .45); ball.side = "dead"; say("MURATA!", "#d81e4a"); }
+        }
+        if(ball.y >= GROUND - R){
+          ball.y = GROUND - R; burst(ball.x, GROUND - 2, "#ff9db4");
+          if(ball.side === "them"){
+            if(Math.abs(them.x - ball.x) < 11){ // difende e rimanda
+              const l = L(), xl = l.xr[0] + Math.random()*(l.xr[1]-l.xr[0]);
+              ball.y = GROUND - 10; launch(ball.x, ball.y, xl, (l.serveT + .1) / speed()); say("DIFESA", "#4a1c86"); beep(300,.08);
+            } else point(true, ball.x > 320 ? "FUORI... SCHERZO, DENTRO!" : "PUNTO!");
+          } else point(false, ball.side === "dead" ? "MURATA!" : "A TERRA!");
+        }
+        if(ball && ball.x < -10 && state === "play") point(false, "FUORI!");
+        if(ball && ball.x > 335 && ball.side === "them" && state === "play") point(true, "MANI-OUT!");
+        // la palla tocca la rete
+        if(ball && state === "play" && Math.abs(ball.x - NETX) < 2 && ball.y > NETTOP) { ball.vx *= -.3; }
+      }
+    }
+    parts.forEach(p => { p.vy += 300*dt; p.x += p.vx*dt; p.y += p.vy*dt; p.t -= dt; }); parts = parts.filter(p => p.t > 0);
+    if(msgT > 0) msgT -= dt;
+  }
+  function txt(s, x, y, col, sc = 1, center = false){
+    s = String(s).toUpperCase(); const w = s.length*4*sc - sc; if(center) x = Math.round(x - w/2);
+    for(const ch of s){ glyph(c, ch, x, y, col, sc); x += 4*sc; }
+  }
+  function drawGuy(p, flip, air){
+    const x = Math.round(p.x), y = Math.round(p.y);
+    c.save(); c.translate(x, 0); if(flip){ c.scale(-1,1); }
+    c.fillStyle = "#1e0a3c"; c.fillRect(-1, y-8, 3, 8); c.fillRect(6, y-8, 3, 8);          // gambe
+    c.fillStyle = "#2a0e55"; c.fillRect(-2, y-12, 12, 5);                                    // pantaloncini
+    c.drawImage(p.img, -4, y-27, 16, 15);                                                    // maglia
+    c.fillStyle = "#f2c9a0"; c.fillRect(1, y-34, 6, 6); c.fillStyle = "#1e0a3c"; c.fillRect(1, y-35, 6, 2);   // testa
+    if(air || p.arms){ c.fillStyle = "#f2c9a0"; c.fillRect(7, y-40, 2, 12); }                // braccio alzato
+    c.restore();
+  }
+  function draw(){
+    // palestra
+    const g = c.createLinearGradient(0,0,0,GROUND); g.addColorStop(0,"#f3ecff"); g.addColorStop(1,"#ddd0f3");
+    c.fillStyle = g; c.fillRect(0,0,LW,GROUND);
+    c.fillStyle = "#e7dcfa"; for(let i=0;i<LW;i+=40) c.fillRect(i, 18, 24, 30);              // finestroni
+    c.fillStyle = "#7444c4"; c.fillRect(0, GROUND, LW, LH-GROUND);
+    c.fillStyle = "#8a5ad6"; for(let i=0;i<LW;i+=16) c.fillRect(i, GROUND+6, 10, 2);
+    c.fillStyle = "#fff"; c.fillRect(ATK, GROUND, 2, 4); c.fillRect(LW-ATK-2, GROUND, 2, 4);   // linee dei 3 m
+    if(L().pipe){ c.fillStyle = "rgba(216,30,74,.12)"; c.fillRect(ATK, 0, NETX-ATK, GROUND); }
+    // rete
+    c.fillStyle = "#1e0a3c"; c.fillRect(NETX-1, NETTOP, 2, GROUND-NETTOP);
+    c.fillStyle = "rgba(30,10,60,.25)"; for(let y=NETTOP+4;y<NETTOP+30;y+=4) c.fillRect(NETX-3, y, 6, 1);
+    c.fillStyle = "#fff"; c.fillRect(NETX-3, NETTOP, 6, 3);
+    // muro avversario
+    for(let i=0;i<L().blk;i++){ c.fillStyle = "rgba(255,255,255,.8)"; c.fillRect(NETX+3+i*3, blockTop()+i*2, 3, NETTOP-blockTop()+6); }
+    // raggio di mira mentre tieni premuto
+    if(hold && ball && ball.side === "me"){ c.strokeStyle = "rgba(216,30,74,.6)"; c.setLineDash([3,3]); c.beginPath();
+      c.moveTo(me.x+7, me.y-34-holdT*60); c.lineTo(285, GROUND-4); c.stroke(); c.setLineDash([]); }
+    drawGuy(them, true, false);
+    drawGuy({...me, y: me.y + (hold && !me.air ? 3 : 0)}, false, me.air);
+    // palla
+    if(ball){ const bx = Math.round(ball.x), by = Math.round(ball.y);
+      c.fillStyle = "rgba(30,10,60,.25)"; c.fillRect(bx-3, GROUND-1, 6, 2);
+      c.fillStyle = "#1e0a3c"; c.fillRect(bx-4, by-3, 8, 6); c.fillRect(bx-3, by-4, 6, 8);
+      c.fillStyle = "#8b3dff"; c.fillRect(bx-3, by-3, 6, 6); c.fillStyle = "#fff"; c.fillRect(bx-2, by-2, 2, 2); }
+    parts.forEach(p => { c.fillStyle = p.col; c.fillRect(Math.round(p.x), Math.round(p.y), 2, 2); });
+    // HUD
+    txt(`PUNTI ${score}`, 6, 6, "#4a1c86", 1); txt(`RECORD ${best}`, 6, 13, "#8a7fa0", 1);
+    for(let i=0;i<3;i++){ c.fillStyle = i < hearts ? "#d81e4a" : "#c9bfdc"; c.fillRect(LW-12-i*9, 6, 6, 5); c.fillRect(LW-11-i*9, 11, 4, 1); }
+    txt(L().t, LW/2, 6, "#6a2fb5", 1, true);
+    if(hold && !me.air){ c.fillStyle = "#c9bfdc"; c.fillRect(me.x-4, me.y+4, 20, 3); c.fillStyle = "#6a2fb5"; c.fillRect(me.x-4, me.y+4, 20*holdT/.6, 3); }
+    if(msgT > 0 && msg) txt(msg.t, LW/2, 60, msg.col, 2, true);
+    if(state === "intro" || state === "over"){
+      c.fillStyle = "rgba(255,255,255,.82)"; c.fillRect(40, 44, 240, 76);
+      c.strokeStyle = "#6a2fb5"; c.strokeRect(40.5, 44.5, 239, 75);
+      txt(state === "over" ? `FINE: ${score} PUNTI` : "PURPLE RALLY", LW/2, 54, "#6a2fb5", 2, true);
+      txt("LASCIA IL DITO PER SALTARE SOTTO LA PALLA", LW/2, 76, "#1e0a3c", 1, true);
+      txt("TOCCO BREVE: PALLONETTO", LW/2, 86, "#1e0a3c", 1, true);
+      txt("TIENI PREMUTO: SCHIACCIATA PIU ALTA", LW/2, 94, "#1e0a3c", 1, true);
+      txt(state === "over" ? "TOCCA PER RIGIOCARE" : "TOCCA PER INIZIARE", LW/2, 108, "#d81e4a", 1, true);
+    }
+  }
+  function frame(t){
+    if(!running) return;
+    const dt = Math.min(.033, (t - last)/1000 || 0); last = t;
+    step(dt); draw(); requestAnimationFrame(frame);
+  }
+  function down(e){
+    e.preventDefault();
+    if(state === "intro" || state === "over"){ reset(); return; }
+    hold = true; holdT = 0;
+  }
+  function up(e){
+    e.preventDefault();
+    if(!hold) return; hold = false;
+    if(!me.air && state === "play"){ me.air = true; me.shot = holdT; me.vy = -(150 + holdT*55); }
+  }
+  cv.addEventListener("pointerdown", down); cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("contextmenu", e => e.preventDefault());
+  // in pausa quando non si vede (batteria)
+  new IntersectionObserver(es => es.forEach(en => {
+    if(en.isIntersecting && !running){ running = true; last = performance.now(); requestAnimationFrame(frame); }
+    else if(!en.isIntersecting){ running = false; }
+  })).observe(cv);
+  state = "intro"; const [a,b] = pickPlayers(); me = {n:a,x:70,y:GROUND,vy:0,air:false,img:kitImg(a)}; them = {n:b,x:250,y:GROUND,img:kitImg(b),arms:0};
+  score = 0; hearts = 3; lvl = 0; loop = 0; ball = null; setTip(); draw();
+  return {reset};
 })();
 
 function show(j){
