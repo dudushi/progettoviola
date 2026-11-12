@@ -85,6 +85,37 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
 #cl tr.us td{background:var(--sel);color:#fff;font-weight:bold;border-color:#7f4fc4}
 #cl tr.us th{background:#4a1c86;color:#fff}
 #cl tr.riv td.nm::after{content:" !";color:var(--red);font-weight:bold}
+/* ===== campo 6 vs 6 ===== */
+.court{position:relative;margin-bottom:6px;border:1px solid #7d6ea0;overflow:hidden;touch-action:manipulation}
+.floor{position:absolute;left:0;right:0;top:0;background:#7a45c9;
+  background:repeating-linear-gradient(90deg,#7444c4 0 14px,#7a4acb 14px 28px)}
+.play{position:absolute;left:6%;right:6%;top:9%;bottom:9%;border:2px solid #fff;
+  background:repeating-linear-gradient(90deg,#e7dbfa 0 12px,#eee5fc 12px 24px)}
+.al{position:absolute;top:0;bottom:0;width:0;border-left:2px solid rgba(255,255,255,.95)}
+.al.a1{left:33.33%} .al.a2{left:66.66%}
+.play::after{content:"";position:absolute;top:0;bottom:0;left:50%;margin-left:-1px;border-left:2px solid #fff}
+.net{position:absolute;left:50%;top:4%;bottom:4%;width:8px;margin-left:-4px;
+  background:repeating-linear-gradient(0deg,rgba(30,10,60,.55) 0 1px,transparent 1px 4px),rgba(255,255,255,.35);
+  border-left:2px solid #1e0a3c;border-right:2px solid #1e0a3c;box-shadow:1px 0 0 rgba(255,255,255,.6)}
+.net::before,.net::after{content:"";position:absolute;left:-3px;width:10px;height:6px;background:#1e0a3c}
+.net::before{top:-3px} .net::after{bottom:-3px}
+.bench{position:absolute;left:0;right:0;bottom:0;background:repeating-conic-gradient(#f4effb 0 25%,#fff 0 50%) 0 0/16px 16px;border-top:1px solid #7d6ea0}
+.bench span{position:absolute;left:6px;top:3px;font:10px var(--ui);color:#8a7fa0}
+.pl{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:left .75s cubic-bezier(.65,0,.35,1),top .75s cubic-bezier(.65,0,.35,1);z-index:2;pointer-events:none}
+.pl .hop{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pl canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+.pl .shadow{width:30px;height:5px;margin-top:-2px;border-radius:50%;background:rgba(30,10,60,.22)}
+.ball{position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;z-index:3;pointer-events:none;
+  transition:left .9s cubic-bezier(.3,.7,.3,1),top .9s cubic-bezier(.3,.7,.3,1)}
+.ball img{width:100%;height:100%;display:block}
+.shufrow{display:flex;justify-content:flex-end;margin:0 0 14px}
+.gelbtn{position:relative;overflow:hidden;min-height:40px;padding:0 18px;border-radius:999px;border:1px solid #4a1c86;cursor:pointer;
+  background:linear-gradient(#a77ce6,#6a2fb5 60%,#5b26a0);color:#fff;font:bold 13px Verdana,Geneva,sans-serif;letter-spacing:.5px;
+  text-shadow:0 1px 1px rgba(40,0,80,.5);box-shadow:0 1px 3px rgba(74,28,134,.35);-webkit-appearance:none;appearance:none}
+.gelbtn::before{content:"";position:absolute;left:6px;right:6px;top:2px;height:46%;border-radius:999px;background:linear-gradient(rgba(255,255,255,.65),rgba(255,255,255,.08))}
+.gelbtn:active{filter:brightness(.92)}
+@media (prefers-reduced-motion: reduce){ .pl,.ball{transition:none} }
 .roster{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:10px 6px 12px;
   border:1px solid #7d6ea0;box-shadow:inset 1px 1px 0 #6b5a8e;
   background:repeating-conic-gradient(#f4effb 0 25%,#ffffff 0 50%) 0 0/16px 16px}
@@ -113,6 +144,13 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
   </div>
 
   <div class="alerts" id="alerts"></div>
+
+  <p class="cmd">&gt;&gt; <i>campo</i>('6 vs 6')</p>
+  <div class="court" id="court" aria-label="Campo con formazioni casuali">
+    <div class="floor"><div class="play"><i class="al a1"></i><i class="al a2"></i></div><div class="net"></div></div>
+    <div class="bench"><span>panchina</span></div>
+  </div>
+  <div class="shufrow"><button class="gelbtn" id="shuffle" type="button">⟳ Shuffle</button></div>
 
   <p class="cmd">&gt;&gt; <i>classifica</i>('eccellenza A')</p>
   <div class="grid">
@@ -273,23 +311,137 @@ function glyph(c,ch,x,y,col,s){
   const b = PX[ch] || PX[" "]; c.fillStyle = col;
   for(let i=0;i<15;i++) if(b[i]==="1") c.fillRect(x+(i%3)*s, y+Math.floor(i/3)*s, s, s);
 }
+const LIBERO = new Set([1,5,34]);   // Negro, Bellomo, Elezi
+const KC_LIB = {O:"#1e0a3c",P:"#ffffff",L:"#ffffff",D:"#d6cbe9",W:"#6a2fb5"};
+function kitCanvas(num, css){
+  const lib = LIBERO.has(num), pal = lib ? KC_LIB : KC;
+  const j = document.createElement("canvas"); j.width = 32; j.height = 30;
+  j.style.width = (32*css)+"px"; j.style.height = (30*css)+"px";
+  const c = j.getContext("2d");
+  KIT.forEach((r,y) => { for(let x=0;x<r.length;x++){ const col = pal[r[x]]; if(col){ c.fillStyle = col; c.fillRect(x,y,1,1); } } });
+  const t = String(num), w = t.length*6 + (t.length-1)*2; let x = Math.floor((32-w)/2);
+  const fg = lib ? "#6a2fb5" : "#ffffff", sh = lib ? "#cbbbe6" : KC.D;
+  for(const ch of t){ glyph(c,ch,x+1,12,sh,2); glyph(c,ch,x,11,fg,2); x += 8; }
+  return j;
+}
+function nameCanvas(name, css){
+  const up = name.toUpperCase(), nw = up.length*4-1;
+  const n = document.createElement("canvas"); n.width = nw; n.height = 5;
+  n.style.width = (nw*css)+"px"; n.style.height = (5*css)+"px";
+  const nc = n.getContext("2d"); let nx = 0; for(const ch of up){ glyph(nc,ch,nx,0,"#2a0e55",1); nx += 4; }
+  n.setAttribute("aria-hidden","true");
+  return n;
+}
 function drawRoster(){
   const box = document.getElementById("roster"); if(!box || box.childElementCount) return;
   ROSA.forEach(([name,num]) => {
     const k = document.createElement("div"); k.className = "kit";
-    const j = document.createElement("canvas"); j.width = 32; j.height = 30; j.style.width = "64px"; j.style.height = "60px";
-    const c = j.getContext("2d");
-    KIT.forEach((r,y) => { for(let x=0;x<r.length;x++){ const col = KC[r[x]]; if(col){ c.fillStyle = col; c.fillRect(x,y,1,1); } } });
-    const t = String(num), w = t.length*6 + (t.length-1)*2; let x = Math.floor((32-w)/2);
-    for(const ch of t){ glyph(c,ch,x+1,12,KC.D,2); glyph(c,ch,x,11,KC.W,2); x += 8; }
-    const up = name.toUpperCase(), nw = up.length*4-1;
-    const n = document.createElement("canvas"); n.width = nw; n.height = 5; n.style.width = (nw*2)+"px"; n.style.height = "10px";
-    const nc = n.getContext("2d"); let nx = 0; for(const ch of up){ glyph(nc,ch,nx,0,"#2a0e55",1); nx += 4; }
-    j.setAttribute("role","img"); j.setAttribute("aria-label", `${name}, numero ${num}`); n.setAttribute("aria-hidden","true");
-    k.append(j,n); box.append(k);
+    const j = kitCanvas(num, 2);
+    j.setAttribute("role","img"); j.setAttribute("aria-label", `${name}, numero ${num}${LIBERO.has(num)?", libero":""}`);
+    k.append(j, nameCanvas(name, 2)); box.append(k);
   });
 }
 drawRoster();
+
+/* ===== campo 6 vs 6 con shuffle ===== */
+const Court = (() => {
+  const box = document.getElementById("court"); if(!box) return null;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const els = new Map();
+  ROSA.forEach(([name,num]) => {
+    const p = document.createElement("div"); p.className = "pl";
+    const h = document.createElement("div"); h.className = "hop";
+    const j = kitCanvas(num, 1.25); j.setAttribute("role","img"); j.setAttribute("aria-label", `${name} ${num}`);
+    const sd = document.createElement("i"); sd.className = "shadow";
+    h.append(j, nameCanvas(name, 1)); p.append(h, sd); box.append(p); els.set(num, p);
+  });
+  const ball = document.createElement("div"); ball.className = "ball";
+  const bi = document.createElement("img"); bi.alt = ""; const orb = document.querySelector(".head .orb"); if(orb) bi.src = orb.src;
+  ball.append(bi); box.append(ball);
+
+  let W = 0, CH = 0, BH = 0, layout = null;
+  function size(){
+    W = box.clientWidth; CH = Math.round(W * 0.6); BH = 68;
+    box.style.height = (CH + BH) + "px";
+    box.querySelector(".floor").style.height = CH + "px";
+    box.querySelector(".bench").style.height = BH + "px";
+  }
+  // posizioni: squadra sinistra guarda a destra, squadra destra guarda a sinistra
+  const X = {L:{front:.40, back:.185}, R:{front:.60, back:.815}}, Y = [.2,.5,.8];
+  const slots = side => {
+    const f = X[side].front, b = X[side].back, top = side==="L";
+    // ordine: posizioni 1..6 (1 = battitore, dietro a destra)
+    return top
+      ? [[b,Y[2]],[f,Y[2]],[f,Y[1]],[f,Y[0]],[b,Y[0]],[b,Y[1]]]
+      : [[b,Y[0]],[f,Y[0]],[f,Y[1]],[f,Y[2]],[b,Y[2]],[b,Y[1]]];
+  };
+  const shuffleArr = a => { for(let i=a.length-1;i>0;i--){ const k = Math.floor(Math.random()*(i+1)); [a[i],a[k]] = [a[k],a[i]]; } return a; };
+  function deal(){
+    // un libero per squadra (se ci sono), gli altri a caso
+    const libs = shuffleArr(ROSA.map(r => r[1]).filter(n => LIBERO.has(n)));
+    const rest = shuffleArr(ROSA.map(r => r[1]).filter(n => !LIBERO.has(n)));
+    const teams = {L:[], R:[]}, bench = [];
+    if(libs.length) teams.L.push(libs.shift());
+    if(libs.length) teams.R.push(libs.shift());
+    bench.push(...libs);
+    for(const n of rest){
+      const side = ["L","R"].find(sd => teams[sd].length < 6);
+      side ? teams[side].push(n) : bench.push(n);
+    }
+    shuffleArr(bench);
+    const pos = new Map();
+    for(const sd of ["L","R"]){
+      const s6 = slots(sd), list = teams[sd];
+      const li = list.findIndex(n => LIBERO.has(n));
+      const order = Array(6).fill(null);
+      if(li >= 0){ const k = Math.random() < .5 ? 4 : 5; order[k] = list[li]; }   // libero in seconda linea, mai al servizio
+      let q = list.filter((n,i) => i !== li);
+      for(let k=0;k<6;k++) if(order[k] === null) order[k] = q.shift();
+      order.forEach((n,k) => pos.set(n, {fx:s6[k][0], fy:s6[k][1], court:true}));
+    }
+    bench.forEach((n,i) => pos.set(n, {fx:(i+1)/(bench.length+1), fy:null, court:false}));
+    const server = Math.random() < .5 ? "L" : "R";
+    return {pos, server, serverNum: (() => { for(const [n,p] of pos) if(p.court && p.fx === X[server].back && p.fy === (server==="L"?Y[2]:Y[0])) return n; })()};
+  }
+  const px = p => {
+    const pl = .06, pt = .09, pw = .88, ph = .82;
+    if(!p.court) return [p.fx * W, CH + BH/2 + 7];
+    return [(pl + pw*p.fx) * W, (pt + ph*p.fy) * CH];
+  };
+  function place(animate){
+    els.forEach((el, n) => {
+      const [x,y] = px(layout.pos.get(n));
+      el.style.left = x + "px"; el.style.top = y + "px";
+    });
+    const sp = layout.pos.get(layout.serverNum);
+    if(sp){ const [x,y] = px(sp); const dx = layout.server === "L" ? -22 : 22; ball.style.left = (x+dx) + "px"; ball.style.top = (y-14) + "px"; }
+  }
+  function hop(){
+    if(reduce) return;
+    let i = 0;
+    els.forEach(el => {
+      const d = (i++) * 30;
+      el.style.transitionDelay = d + "ms";
+      el.firstChild.animate([{transform:"translateY(0) scale(1)"},{transform:"translateY(-16px) scale(1.12)"},{transform:"translateY(0) scale(1)"}],
+        {duration:750, delay:d, easing:"cubic-bezier(.3,.6,.4,1)"});
+    });
+    ball.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(360deg) scale(1.4)"},{transform:"rotate(720deg) scale(1)"}],{duration:900,easing:"ease-out"});
+  }
+  function shuffle(){ layout = deal(); hop(); place(true); }
+  function init(){
+    size(); layout = deal();
+    // ingresso: tutti partono dalla rete
+    els.forEach(el => { el.style.transition = "none"; el.style.left = (W/2)+"px"; el.style.top = (CH/2)+"px"; });
+    ball.style.transition = "none"; ball.style.left = (W/2)+"px"; ball.style.top = (CH/2)+"px";
+    box.offsetHeight;
+    els.forEach(el => el.style.transition = ""); ball.style.transition = "";
+    requestAnimationFrame(() => { hop(); place(true); });
+  }
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); els.forEach(el => el.style.transitionDelay = "0ms"); place(false); }, 120); });
+  document.getElementById("shuffle").addEventListener("click", shuffle);
+  init();
+  return {shuffle};
+})();
 
 function show(j){
   try{ use(j); render(); }
