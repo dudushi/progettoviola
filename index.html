@@ -85,6 +85,11 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
 #cl tr.us td{background:var(--sel);color:#fff;font-weight:bold;border-color:#7f4fc4}
 #cl tr.us th{background:#4a1c86;color:#fff}
 #cl tr.riv td.nm::after{content:" !";color:var(--red);font-weight:bold}
+.roster{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:10px 6px 12px;
+  border:1px solid #7d6ea0;box-shadow:inset 1px 1px 0 #6b5a8e;
+  background:repeating-conic-gradient(#f4effb 0 25%,#ffffff 0 50%) 0 0/16px 16px}
+.kit{flex:none;scroll-snap-align:start;width:104px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.kit canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .status{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px max(12px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px));
   background:linear-gradient(#f7f3fd,#e6ddf4);border-top:1px solid var(--edge);box-shadow:0 -1px 0 #fff inset,0 -4px 12px rgba(40,10,80,.12)}
 .status .in{max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px}
@@ -136,6 +141,9 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
     </table>
   </div>
   <div class="status" id="status" aria-live="polite"></div>
+
+  <p class="cmd" style="margin-top:16px">&gt;&gt; <i>rosa</i>('purple')</p>
+  <div class="roster" id="roster" aria-label="Rosa della squadra"></div>
 
   <p class="foot" id="foot"></p>
 </div>
@@ -254,6 +262,35 @@ async function load(){
     return SNAPSHOT;
   }
 }
+
+/* ===== rosa: divise in pixel art ===== */
+const ROSA = [["Negro",1],["Lettieri",3],["Maniscalco",4],["Bellomo",5],["Porcino",6],["Brugo",7],["Conzato",8],["Foglino",10],
+  ["Casassa Mont",14],["Tammaro",21],["Centoletti",24],["Imparati",33],["Elezi",34],["Di Fazio",36],["Guidetti",71],["Licandro",90]];
+const KIT = ["................................", "................................", ".......OOOOOO......OOOOOO.......", "......OPPLPPPW....WPPPDPPO......", ".....OPPPLPPPPWWWWPPPPDPPPO.....", "....OLPPPLPPPPPPPPPPPPDPPPPO....", "...OLLPPPLPPPPPPPPPPPPDPPPPPO...", "..OLLLPPPLPPPPPPPPPPPPDPPPPPPO..", ".OLLLLPPPLPPPPPPPPPPPPDPPPPPPPO.", ".OLLLLPPPLPPPPPPPPPPPPDPPPPPPPO.", ".OWWWWWWPLPPPPPPPPPPPPDPWWWWWWO.", ".OPPPPPPPLPPPPPPPPPPPPDPPPPPPPO.", ".OOOOOOOPLPPPPPPPPPPPPDPOOOOOOO.", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........OLPPPPPPPPPPPPDO........", "........ODDDDDDDDDDDDDDO........", "........OOOOOOOOOOOOOOOO........"];
+const PX = {"A": "010101111101101", "B": "110101110101110", "C": "011100100100011", "D": "110101101101110", "E": "111100110100111", "F": "111100110100100", "G": "011100101101011", "H": "101101111101101", "I": "111010010010111", "J": "001001001101010", "K": "101101110101101", "L": "100100100100111", "M": "101111111101101", "N": "110101101101101", "O": "010101101101010", "P": "110101110100100", "Q": "010101101110011", "R": "110101110101101", "S": "011100010001110", "T": "111010010010010", "U": "101101101101111", "V": "101101101101010", "W": "101101111111101", "X": "101101010101101", "Y": "101101010010010", "Z": "111001010100111", "0": "111101101101111", "1": "010110010010111", "2": "110001010100111", "3": "110001010001110", "4": "101101111001001", "5": "111100110001110", "6": "011100111101111", "7": "111001010010010", "8": "111101111101111", "9": "111101111001110", " ": "000000000000000"};
+const KC = {O:"#1e0a3c",P:"#6a2fb5",L:"#8f5ae0",D:"#4e1f8c",W:"#ffffff"};
+function glyph(c,ch,x,y,col,s){
+  const b = PX[ch] || PX[" "]; c.fillStyle = col;
+  for(let i=0;i<15;i++) if(b[i]==="1") c.fillRect(x+(i%3)*s, y+Math.floor(i/3)*s, s, s);
+}
+function drawRoster(){
+  const box = document.getElementById("roster"); if(!box || box.childElementCount) return;
+  ROSA.forEach(([name,num]) => {
+    const k = document.createElement("div"); k.className = "kit";
+    const j = document.createElement("canvas"); j.width = 32; j.height = 30; j.style.width = "64px"; j.style.height = "60px";
+    const c = j.getContext("2d");
+    KIT.forEach((r,y) => { for(let x=0;x<r.length;x++){ const col = KC[r[x]]; if(col){ c.fillStyle = col; c.fillRect(x,y,1,1); } } });
+    const t = String(num), w = t.length*6 + (t.length-1)*2; let x = Math.floor((32-w)/2);
+    for(const ch of t){ glyph(c,ch,x+1,12,KC.D,2); glyph(c,ch,x,11,KC.W,2); x += 8; }
+    const up = name.toUpperCase(), nw = up.length*4-1;
+    const n = document.createElement("canvas"); n.width = nw; n.height = 5; n.style.width = (nw*2)+"px"; n.style.height = "10px";
+    const nc = n.getContext("2d"); let nx = 0; for(const ch of up){ glyph(nc,ch,nx,0,"#2a0e55",1); nx += 4; }
+    j.setAttribute("role","img"); j.setAttribute("aria-label", `${name}, numero ${num}`); n.setAttribute("aria-hidden","true");
+    k.append(j,n); box.append(k);
+  });
+}
+drawRoster();
+
 function show(j){
   try{ use(j); render(); }
   catch(e){ console.error(e); if(j !== SNAPSHOT){ use(SNAPSHOT); render(); } }
