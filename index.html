@@ -109,7 +109,39 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
 .ball{position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;z-index:3;pointer-events:none;
   transition:left .9s cubic-bezier(.3,.7,.3,1),top .9s cubic-bezier(.3,.7,.3,1)}
 .ball img{width:100%;height:100%;display:block}
-.shufrow{display:flex;justify-content:flex-end;margin:0 0 14px}
+.shufrow{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px}
+.gelbtn.ghost{background:linear-gradient(#ffffff,#ece4f8);color:#4a1c86;text-shadow:none;border-color:#b9a6d6}
+.ov{position:absolute;left:0;top:0;z-index:3;pointer-events:none;overflow:hidden}
+.zones{position:absolute;left:0;top:0;z-index:1;pointer-events:none;image-rendering:pixelated;image-rendering:crisp-edges}
+.ov .trail{stroke:#1e0a3c;stroke-width:1.5;stroke-dasharray:3 3;opacity:.55}
+.ov .ray{stroke:#d81e4a;stroke-width:1.5;stroke-dasharray:5 3;opacity:.85}
+.ov .cover{fill:rgba(106,47,181,.08);stroke:#6a2fb5;stroke-width:1.5;stroke-dasharray:4 3}
+.ov .shadowz{fill:rgba(30,10,60,.18)}
+.ov .lbl{font:bold 8px Verdana,sans-serif;fill:#1e0a3c;paint-order:stroke;stroke:#fff;stroke-width:3px;text-anchor:middle}
+.ov .lbl.ok{fill:#1d7a12} .ov .lbl.sys{fill:#6a2fb5;font-weight:normal}
+.ov .boom{font:bold 16px Verdana,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:4px}
+.ov .boom.ok{fill:#1d7a12} .ov .boom.ko{fill:#d81e4a}
+.pl.pick{pointer-events:auto;cursor:pointer;z-index:5}
+.pl.pick .hop{animation:pulse 1s ease-in-out infinite}
+.pl.pick canvas:first-of-type{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 4px #c13cf2)}
+.pl.act canvas:first-of-type{filter:drop-shadow(0 0 3px #ffd84a)}
+@keyframes pulse{50%{transform:translateY(-3px)}}
+.pl .tag{display:none;font:bold 9px Verdana,sans-serif;color:#fff;background:#1e0a3c;border-radius:3px;padding:0 3px;margin-bottom:1px;line-height:13px}
+.pl.pick::after{content:"";position:absolute;left:-6px;right:-6px;top:-6px;bottom:-6px}
+.sit{margin:0 0 8px;padding:8px 10px;border:1px solid var(--edge);background:#faf8fe;box-shadow:inset 1px 1px 0 #fff}
+.sit-h{display:flex;justify-content:space-between;align-items:baseline}
+.sit-h b{font:bold 13px Verdana,sans-serif;color:var(--sel)}
+.sit-h span{font:10px var(--ui);color:#8a7fa0}
+.sit p{margin:4px 0 0}
+.sit .tw{color:#333}
+.sit .tp{color:#6a5a86;font-size:11px}
+.sit .tp::before{content:"Schema · ";font-weight:bold}
+.sit .stp{margin-top:6px;font-weight:bold;color:#1e0a3c}
+.sit .stp b.w{color:var(--green)} .sit .stp b.l{color:var(--red)}
+.shots{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.shot{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid #c4b3e0;background:linear-gradient(#fff,#f1ebfb);
+  color:#4a1c86;font:bold 12px var(--ui);box-shadow:inset 0 1px 0 #fff;cursor:pointer;-webkit-appearance:none;appearance:none}
+.shot:active{background:#e4daf3} .shot:disabled{opacity:.5}
 .gelbtn{position:relative;overflow:hidden;min-height:40px;padding:0 18px;border-radius:999px;border:1px solid #4a1c86;cursor:pointer;
   background:linear-gradient(#a77ce6,#6a2fb5 60%,#5b26a0);color:#fff;font:bold 13px Verdana,Geneva,sans-serif;letter-spacing:.5px;
   text-shadow:0 1px 1px rgba(40,0,80,.5);box-shadow:0 1px 3px rgba(74,28,134,.35);-webkit-appearance:none;appearance:none}
@@ -146,11 +178,18 @@ td.res.tbd,tr.tbd td.res{color:#b07800;font-size:11px}
   <div class="alerts" id="alerts"></div>
 
   <p class="cmd">&gt;&gt; <i>campo</i>('6 vs 6')</p>
-  <div class="court" id="court" aria-label="Campo con formazioni casuali">
+  <div class="court" id="court" aria-label="Campo: situazioni di gioco interattive">
     <div class="floor"><div class="play"><i class="al a1"></i><i class="al a2"></i></div><div class="net"></div></div>
     <div class="bench"><span>panchina</span></div>
   </div>
-  <div class="shufrow"><button class="gelbtn" id="shuffle" type="button">⟳ Shuffle</button></div>
+  <div class="sit" id="sit" aria-live="polite">
+    <div class="sit-h"><b id="sitTitle"></b><span id="sitN"></span></div>
+    <p id="sitTwist" class="tw"></p>
+    <p id="sitTip" class="tp"></p>
+    <p id="sitStep" class="stp"></p>
+    <div class="shots" id="shots"></div>
+  </div>
+  <div class="shufrow"><button class="gelbtn ghost" id="replay" type="button">↺ Rigioca</button><button class="gelbtn" id="shuffle" type="button">⟳ Shuffle</button></div>
 
   <p class="cmd">&gt;&gt; <i>classifica</i>('eccellenza A')</p>
   <div class="grid">
@@ -343,104 +382,352 @@ function drawRoster(){
 }
 drawRoster();
 
-/* ===== campo 6 vs 6 con shuffle ===== */
-const Court = (() => {
+/* ===== campo 6 vs 6: 10 situazioni di gioco interattive ===== */
+const Game = (() => {
   const box = document.getElementById("court"); if(!box) return null;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const els = new Map();
+  const BASE = ["lungolinea","diagonale","diagonale stretta","pallonetto"];
+  const DEF = {perimetrale:"difesa perimetrale", rotazione:"difesa a rotazione", avanzato:"difesa con centrale avanzato"};
+  const SCEN = [
+    {t:"Ricezione a W", tw:"Battuta float che balla come un budino: in cinque contro un pallone ubriaco.",
+     tip:"W a 5: ognuno copre meno campo, ma ci sono tante linee di confine da chiamare a voce.", rec:"W", def:"perimetrale", blk:2, set:"any", atk:"front", shots:BASE},
+    {t:"Ricezione a 3", tw:"Il libero al centro, gli attaccanti spariscono a rete.",
+     tip:"3 ricevitori: meno confini e attaccanti liberi di partire subito.", rec:"3", def:"rotazione", blk:2, set:"any", atk:"front", shots:BASE},
+    {t:"Ricezione a 2", tw:"Due eroi, 81 m² di campo. Gli altri fanno il tifo.",
+     tip:"A 2 ricevono solo i migliori: ognuno si prende mezzo campo di competenza.", rec:"2", def:"avanzato", blk:2, set:"any", atk:"front", shots:BASE},
+    {t:"Seconda intenzione", tw:"L’alzatore è in prima linea e stasera vuole segnare lui.",
+     tip:"Attacco di seconda: il muro guarda gli attaccanti, non chi alza.", rec:"3", setterFront:true, def:"perimetrale", blk:1, set:"setter", atk:"setter", shots:["pallonetto","diagonale stretta","lungolinea"]},
+    {t:"Alza il libero", tw:"L’alzatore si sta allacciando una scarpa. Tocca al libero.",
+     tip:"Se il libero palleggia davanti ai 3 m nessuno può attaccare sopra il nastro: alza da dietro la linea o in bagher.", rec:"3", liberoSets:true, def:"rotazione", blk:2, set:"libero", atk:"front", shots:BASE},
+    {t:"Pipe", tw:"La prima linea è murata in partenza: si attacca da dietro.",
+     tip:"La seconda linea attacca sopra il nastro solo se stacca da dietro la linea dei 3 m.", rec:"3", def:"avanzato", blk:2, set:"any", atk:"back", shots:BASE},
+    {t:"Primo tempo", tw:"Il muro guarda le ali, il centrale parte prima che la palla sia alzata.",
+     tip:"La veloce arriva prima del muro: di solito salta un avversario solo.", rec:"W", def:"perimetrale", blk:1, set:"any", atk:"middle", shots:BASE},
+    {t:"Muro a 3", tw:"Tre muri sul tuo schiacciatore. Sì, tre.",
+     tip:"Contro il muro a 3: mani-out sulla mano esterna o pallonetto dietro le mani.", rec:"3", def:"perimetrale", blk:3, set:"any", atk:"front", shots:[...BASE,"mani-out"]},
+    {t:"Free ball", tw:"Dall’altra parte rimandano una palla facile. Nessuna scusa.",
+     tip:"Su free ball tutti in posizione e attacco a velocità piena.", rec:"free", def:"rotazione", blk:2, set:"any", atk:"any", shots:BASE},
+    {t:"Rigiocata e copertura", tw:"Muro altissimo: appoggia sulle mani e ricostruisci.",
+     tip:"Copertura 3-2: tre vicini all’attaccante, due più dietro, pronti al rimbalzo del muro.", rec:"W", def:"perimetrale", blk:2, set:"any", atk:"front", shots:[...BASE,"rigiocata"]}
+  ];
+  const $s = id => document.getElementById(id);
+  const ui = {title:$s("sitTitle"), n:$s("sitN"), tw:$s("sitTwist"), tip:$s("sitTip"), step:$s("sitStep"), shots:$s("shots")};
+  const els = new Map(), tags = new Map();
   ROSA.forEach(([name,num]) => {
-    const p = document.createElement("div"); p.className = "pl";
+    const p = document.createElement("div"); p.className = "pl"; p.dataset.n = num;
     const h = document.createElement("div"); h.className = "hop";
-    const j = kitCanvas(num, 1.25); j.setAttribute("role","img"); j.setAttribute("aria-label", `${name} ${num}`);
+    const tg = document.createElement("b"); tg.className = "tag";
+    const j = kitCanvas(num, 1); j.setAttribute("role","img"); j.setAttribute("aria-label", `${name} ${num}`);
     const sd = document.createElement("i"); sd.className = "shadow";
-    h.append(j, nameCanvas(name, 1)); p.append(h, sd); box.append(p); els.set(num, p);
+    h.append(tg, j, nameCanvas(name, 1)); p.append(h, sd); box.append(p); els.set(num, p); tags.set(num, tg);
   });
+  const NAME = new Map(ROSA.map(([n,k]) => [k,n]));
+  const ov = document.createElementNS("http://www.w3.org/2000/svg","svg"); ov.setAttribute("class","ov"); box.append(ov);
+  const zc = document.createElement("canvas"); zc.className = "zones"; box.append(zc);
   const ball = document.createElement("div"); ball.className = "ball";
   const bi = document.createElement("img"); bi.alt = ""; const orb = document.querySelector(".head .orb"); if(orb) bi.src = orb.src;
   ball.append(bi); box.append(ball);
 
-  let W = 0, CH = 0, BH = 0, layout = null;
+  let W = 0, CH = 0, BH = 68;
+  const P = {l:.06, t:.09, w:.88, h:.82};
+  const px = (fx,fy) => [(P.l + P.w*fx) * W, (P.t + P.h*fy) * CH];
+  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+  const rnd = a => a[Math.floor(Math.random()*a.length)];
+  const shuf = a => { for(let i=a.length-1;i>0;i--){ const k = Math.floor(Math.random()*(i+1)); [a[i],a[k]] = [a[k],a[i]]; } return a; };
+  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
   function size(){
-    W = box.clientWidth; CH = Math.round(W * 0.6); BH = 68;
+    W = box.clientWidth; CH = Math.round(W * .7);
     box.style.height = (CH + BH) + "px";
     box.querySelector(".floor").style.height = CH + "px";
     box.querySelector(".bench").style.height = BH + "px";
+    ov.setAttribute("width", W); ov.setAttribute("height", CH); ov.setAttribute("viewBox", `0 0 ${W} ${CH}`);
+    zc.style.width = W + "px"; zc.style.height = CH + "px";
   }
-  // posizioni: squadra sinistra guarda a destra, squadra destra guarda a sinistra
-  const X = {L:{front:.40, back:.185}, R:{front:.60, back:.815}}, Y = [.2,.5,.8];
-  const slots = side => {
-    const f = X[side].front, b = X[side].back, top = side==="L";
-    // ordine: posizioni 1..6 (1 = battitore, dietro a destra)
-    return top
-      ? [[b,Y[2]],[f,Y[2]],[f,Y[1]],[f,Y[0]],[b,Y[0]],[b,Y[1]]]
-      : [[b,Y[0]],[f,Y[0]],[f,Y[1]],[f,Y[2]],[b,Y[2]],[b,Y[1]]];
+
+  /* posizioni naturali di rotazione (fx 0..1 su tutto il campo, la rete è a .5) */
+  const NAT = {L:{4:[.4,.2],3:[.4,.5],2:[.4,.8],5:[.15,.2],6:[.15,.5],1:[.15,.8]},
+               R:{2:[.6,.2],3:[.6,.5],4:[.6,.8],1:[.85,.2],6:[.85,.5],5:[.85,.8]}};
+  const FORM = {
+    W:{rec:[[.29,.15],[.26,.5],[.29,.85],[.12,.32],[.12,.68]], hide:[]},
+    "3":{rec:[[.17,.2],[.15,.5],[.17,.8]], hide:[[.45,.38],[.44,.92]]},
+    "2":{rec:[[.17,.3],[.17,.72]], hide:[[.45,.38],[.44,.92],[.06,.93]]},
+    free:{rec:[[.36,.15],[.36,.5],[.36,.85],[.13,.22],[.1,.55]], hide:[]}
   };
-  const shuffleArr = a => { for(let i=a.length-1;i>0;i--){ const k = Math.floor(Math.random()*(i+1)); [a[i],a[k]] = [a[k],a[i]]; } return a; };
+  const assign = (players, spots, natOf) => {   // ognuno al punto libero più vicino
+    const free = spots.slice(), out = new Map();
+    players.forEach(n => {
+      const [x,y] = natOf(n); let bi = 0, bd = 9;
+      free.forEach((s,i) => { const d = (s[0]-x)**2 + (s[1]-y)**2; if(d < bd){ bd = d; bi = i; } });
+      out.set(n, free.splice(bi,1)[0]);
+    });
+    return out;
+  };
+
+  let S = null, st = null, bag = [], idx = 0, gen = 0;
+  function nextScenario(){
+    if(!bag.length){ bag = shuf(SCEN.map((_,i) => i)); if(bag[0] === idx && bag.length > 1) bag.push(bag.shift()); }
+    idx = bag.shift(); return SCEN[idx];
+  }
   function deal(){
-    // un libero per squadra (se ci sono), gli altri a caso
-    const libs = shuffleArr(ROSA.map(r => r[1]).filter(n => LIBERO.has(n)));
-    const rest = shuffleArr(ROSA.map(r => r[1]).filter(n => !LIBERO.has(n)));
-    const teams = {L:[], R:[]}, bench = [];
-    if(libs.length) teams.L.push(libs.shift());
-    if(libs.length) teams.R.push(libs.shift());
-    bench.push(...libs);
-    for(const n of rest){
-      const side = ["L","R"].find(sd => teams[sd].length < 6);
-      side ? teams[side].push(n) : bench.push(n);
-    }
-    shuffleArr(bench);
-    const pos = new Map();
-    for(const sd of ["L","R"]){
-      const s6 = slots(sd), list = teams[sd];
-      const li = list.findIndex(n => LIBERO.has(n));
-      const order = Array(6).fill(null);
-      if(li >= 0){ const k = Math.random() < .5 ? 4 : 5; order[k] = list[li]; }   // libero in seconda linea, mai al servizio
-      let q = list.filter((n,i) => i !== li);
-      for(let k=0;k<6;k++) if(order[k] === null) order[k] = q.shift();
-      order.forEach((n,k) => pos.set(n, {fx:s6[k][0], fy:s6[k][1], court:true}));
-    }
-    bench.forEach((n,i) => pos.set(n, {fx:(i+1)/(bench.length+1), fy:null, court:false}));
-    const server = Math.random() < .5 ? "L" : "R";
-    return {pos, server, serverNum: (() => { for(const [n,p] of pos) if(p.court && p.fx === X[server].back && p.fy === (server==="L"?Y[2]:Y[0])) return n; })()};
+    const libs = shuf(ROSA.map(r => r[1]).filter(n => LIBERO.has(n)));
+    const rest = shuf(ROSA.map(r => r[1]).filter(n => !LIBERO.has(n)));
+    const L = [libs.shift(), ...rest.splice(0,5)], R = [libs.shift(), ...rest.splice(0,5)];
+    const bench = shuf([...libs, ...rest]);
+    const rot = team => {           // libero in seconda linea (5 o 6), gli altri a caso
+      const pos = new Map(), lib = team[0], others = shuf(team.slice(1));
+      const lp = Math.random() < .5 ? 5 : 6; pos.set(lib, lp);
+      [1,2,3,4,5,6].filter(p => p !== lp).forEach((p,i) => pos.set(others[i], p));
+      return pos;
+    };
+    return {L, R, bench, posL: rot(L), posR: rot(R)};
   }
-  const px = p => {
-    const pl = .06, pt = .09, pw = .88, ph = .82;
-    if(!p.court) return [p.fx * W, CH + BH/2 + 7];
-    return [(pl + pw*p.fx) * W, (pt + ph*p.fy) * CH];
-  };
-  function place(animate){
-    els.forEach((el, n) => {
-      const [x,y] = px(layout.pos.get(n));
-      el.style.left = x + "px"; el.style.top = y + "px";
+  const posOf = (side, n) => (side === "L" ? st.posL : st.posR).get(n);
+  const who = (side, p) => [...(side === "L" ? st.posL : st.posR)].find(([,q]) => q === p)[0];
+  function setPos(n, fx, fy){ const [x,y] = px(fx,fy); const e = els.get(n); e.style.left = x+"px"; e.style.top = y+"px"; e._f = [fx,fy]; }
+  function setTag(n, t){ const g = tags.get(n); g.textContent = t || ""; g.style.display = t ? "" : "none"; }
+  function pick(list){ els.forEach((e,n) => e.classList.toggle("pick", list.includes(n))); }
+  function ballAt(fx,fy){ const [x,y] = px(fx,fy); ball.style.left = x+"px"; ball.style.top = y+"px"; ball._f = [fx,fy]; }
+  function fly(to, h, ms){
+    const [x0,y0] = px(...ball._f), [x1,y1] = px(...to); ball._f = to;
+    if(reduce){ ball.style.left = x1+"px"; ball.style.top = y1+"px"; return Promise.resolve(); }
+    ball.style.transition = "none";
+    return new Promise(res => {
+      const t0 = performance.now(), cx = (x0+x1)/2, cy = Math.min(y0,y1) - h*CH;
+      const step = now => {
+        const t = Math.min(1, (now - t0)/ms), u = 1 - t;
+        const x = u*u*x0 + 2*u*t*cx + t*t*x1, y = u*u*y0 + 2*u*t*cy + t*t*y1;
+        ball.style.left = x+"px"; ball.style.top = y+"px";
+        ball.style.transform = `scale(${1 + .6*Math.sin(Math.PI*t)*Math.min(1,h*3)}) rotate(${t*540}deg)`;
+        t < 1 ? requestAnimationFrame(step) : (ball.style.transform = "", res());
+      };
+      requestAnimationFrame(step);
     });
-    const sp = layout.pos.get(layout.serverNum);
-    if(sp){ const [x,y] = px(sp); const dx = layout.server === "L" ? -22 : 22; ball.style.left = (x+dx) + "px"; ball.style.top = (y-14) + "px"; }
   }
-  function hop(){
-    if(reduce) return;
-    let i = 0;
-    els.forEach(el => {
-      const d = (i++) * 30;
-      el.style.transitionDelay = d + "ms";
-      el.firstChild.animate([{transform:"translateY(0) scale(1)"},{transform:"translateY(-16px) scale(1.12)"},{transform:"translateY(0) scale(1)"}],
-        {duration:750, delay:d, easing:"cubic-bezier(.3,.6,.4,1)"});
+  /* overlay SVG */
+  const NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent = ov){ const e = document.createElementNS(NS, tag); for(const k in attrs) e.setAttribute(k, attrs[k]); parent.append(e); return e; }
+  const clearOv = () => { ov.innerHTML = ""; };
+  function line(a, b, cls){ const [x0,y0] = px(...a), [x1,y1] = px(...b); return svg("line",{x1:x0,y1:y0,x2:x1,y2:y1,class:cls}); }
+  function label(p, text, cls){ const [x,y] = px(...p); const t = svg("text",{x,y,class:cls||"lbl"}); t.textContent = text; return t; }
+
+  /* competenze: chi prende la palla in ogni punto del campo (diagramma a pixel) */
+  function zones(rec){
+    const c = zc.getContext("2d"), cell = 6, cw = Math.ceil(W/cell), chh = Math.ceil(CH/cell);
+    zc.width = cw; zc.height = chh; c.clearRect(0,0,cw,chh);
+    if(!rec) return;
+    const cols = ["rgba(106,47,181,.30)","rgba(193,60,242,.26)","rgba(74,28,134,.30)","rgba(143,90,224,.30)","rgba(216,30,74,.20)"];
+    const pts = rec.map(n => els.get(n)._f).filter(Boolean); if(!pts.length) return;
+    for(let gy=0; gy<chh; gy++) for(let gx=0; gx<cw; gx++){
+      const fx = ((gx+.5)*cell/W - P.l)/P.w, fy = ((gy+.5)*cell/CH - P.t)/P.h;
+      if(fx < 0 || fx > .5 || fy < 0 || fy > 1) continue;
+      let bi = 0, bd = 9, sd = 9;
+      pts.forEach((p,i) => { const d = Math.hypot((p[0]-fx)*2, p[1]-fy); if(d < bd){ sd = bd; bd = d; bi = i; } else if(d < sd) sd = d; });
+      c.fillStyle = sd - bd < .025 ? "rgba(30,10,60,.55)" : cols[bi % cols.length];
+      c.fillRect(gx,gy,1,1);
+    }
+  }
+
+  function start(newPlayers){
+    if(newPlayers || !st){ st = deal(); S = nextScenario(); }
+    gen++; st.phase = "rec"; st.rec = st.set = st.atk = null;
+    clearOv(); zones(null); ui.shots.innerHTML = "";
+    els.forEach((e,n) => { setTag(n, ""); e.classList.remove("pick","act"); });
+    // ruoli lato sinistro (Purple 1)
+    const nonLib = st.L.filter(n => !LIBERO.has(n)), lib = st.L.find(n => LIBERO.has(n));
+    st.setter = who("L", S.setterFront ? 2 : 1);
+    if(LIBERO.has(st.setter)) st.setter = nonLib.find(n => posOf("L",n) !== (S.setterFront?2:1)) || nonLib[0];
+    const f = FORM[S.rec];
+    let candidates = st.L.filter(n => n !== st.setter && !(S.liberoSets && n === lib));
+    let receivers;
+    if(S.rec === "W" || S.rec === "free") receivers = candidates.slice(0, f.rec.length);
+    else receivers = [...(S.liberoSets ? [] : [lib]), ...shuf(candidates.filter(n => n !== lib))].slice(0, f.rec.length);
+    st.receivers = receivers;
+    const hiders = st.L.filter(n => n !== st.setter && !receivers.includes(n));
+    const natL = n => NAT.L[posOf("L",n)];
+    const recSpots = assign(receivers, f.rec, natL);
+    const hideSpots = assign(hiders, [...f.hide, [.44,.25],[.3,.5],[.2,.9]], natL);
+    st.setterSpot = S.setterFront ? [.46,.8] : [.45,.64];
+    // posizioni: tutti partono dalla rete e si aprono
+    const all = [...st.L, ...st.R, ...st.bench];
+    const tp = new Map();
+    recSpots.forEach((s,n) => tp.set(n, s)); hideSpots.forEach((s,n) => tp.set(n, s));
+    tp.set(st.setter, S.liberoSets ? [.45,.55] : st.setterSpot);
+    st.R.forEach(n => tp.set(n, NAT.R[posOf("R",n)]));
+    st.server = who("R", 1);
+    if(S.rec !== "free") tp.set(st.server, [1.035, .14]);
+    st.bench.forEach((n,i) => tp.set(n, null));
+    all.forEach((n,i) => {
+      const e = els.get(n);
+      e.style.transitionDelay = (reduce ? 0 : i*25) + "ms";
+      const p = tp.get(n);
+      if(p) setPos(n, ...p);
+      else { e.style.left = ((i - st.L.length - st.R.length + 1)/(st.bench.length+1))*W + "px"; e.style.top = (CH + BH/2 + 7) + "px"; e._f = null; }
+      if(!reduce) e.firstChild.animate([{transform:"translateY(0)"},{transform:"translateY(-14px) scale(1.1)"},{transform:"translateY(0)"}],{duration:700, delay:i*25, easing:"cubic-bezier(.3,.6,.4,1)"});
     });
-    ball.animate([{transform:"rotate(0) scale(1)"},{transform:"rotate(360deg) scale(1.4)"},{transform:"rotate(720deg) scale(1)"}],{duration:900,easing:"ease-out"});
+    // pallone in mano a chi batte (o a un difensore per la free ball)
+    const from = S.rec === "free" ? NAT.R[6] : [1.035, .14];
+    ballAt(from[0] + .02, from[1] - .05);
+    // testo
+    ui.title.textContent = S.t; ui.n.textContent = `${idx+1}/10`;
+    ui.tw.textContent = S.tw; ui.tip.textContent = S.tip;
+    receivers.forEach(n => setTag(n, "R"));
+    const G0 = gen; setTimeout(() => { if(G0 === gen && st.phase === "rec") zones(receivers); }, reduce ? 0 : 800);
+    ui.step.textContent = S.rec === "free" ? "1 · Free ball in arrivo: tocca chi la prende" : "1 · Tocca chi riceve la battuta";
+    pick(receivers);
   }
-  function shuffle(){ layout = deal(); hop(); place(true); }
-  function init(){
-    size(); layout = deal();
-    // ingresso: tutti partono dalla rete
-    els.forEach(el => { el.style.transition = "none"; el.style.left = (W/2)+"px"; el.style.top = (CH/2)+"px"; });
-    ball.style.transition = "none"; ball.style.left = (W/2)+"px"; ball.style.top = (CH/2)+"px";
-    box.offsetHeight;
-    els.forEach(el => el.style.transition = ""); ball.style.transition = "";
-    requestAnimationFrame(() => { hop(); place(true); });
+
+  async function onRec(n){
+    const G = gen;
+    st.phase = "busy"; pick([]); zones(null); st.rec = n; setTag(n, "ric.");
+    els.get(n).classList.add("act");
+    const p = els.get(n)._f, from = ball._f.slice();
+    line(from, p, "trail");
+    if(S.rec !== "free") setTimeout(() => setPos(st.server, ...NAT.R[1]), 600);
+    await fly([p[0]+.01, p[1]-.04], S.rec === "free" ? .35 : .22, 950);
+    if(G !== gen) return;
+    ui.step.textContent = S.set === "libero" ? "2 · Tocca il libero: alza lui" : S.set === "setter" ? "2 · Tocca l’alzatore" : "2 · Tocca chi alza";
+    const elig = S.set === "libero" ? st.L.filter(k => LIBERO.has(k))
+               : S.set === "setter" ? [st.setter]
+               : st.L.filter(k => k !== n && !LIBERO.has(k));
+    st.phase = "set"; pick(elig);
   }
-  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); els.forEach(el => el.style.transitionDelay = "0ms"); place(false); }, 120); });
-  document.getElementById("shuffle").addEventListener("click", shuffle);
-  init();
-  return {shuffle};
+  async function onSet(n){
+    const G = gen;
+    st.phase = "busy"; pick([]); st.set = n; setTag(n, "alz."); els.get(n).classList.add("act");
+    const lib = LIBERO.has(n);
+    const spot = lib ? [.3,.58] : (n === st.setter ? st.setterSpot : [.44,.6]);
+    setPos(n, ...spot);
+    // gli attaccanti di prima linea vanno in rincorsa
+    st.L.forEach(k => { if(k === n || k === st.rec) return; const p = posOf("L",k);
+      if([2,3,4].includes(p) && !LIBERO.has(k)) setPos(k, .3, ({4:.14,3:.45,2:.86})[p]); });
+    await wait(250);
+    if(G !== gen) return;
+    line(ball._f, spot, "trail");
+    await fly([spot[0], spot[1]-.04], .28, 800);
+    if(G !== gen) return;
+    if(lib) label([.31,.5], "da dietro i 3 m: attacco libero", "lbl ok");
+    let elig;
+    if(S.atk === "setter") elig = [n];
+    else {
+      const ok = k => k !== n && !LIBERO.has(k);
+      const front = st.L.filter(k => ok(k) && [2,3,4].includes(posOf("L",k)));
+      const back = st.L.filter(k => ok(k) && [1,5,6].includes(posOf("L",k)));
+      elig = S.atk === "front" ? front : S.atk === "back" ? back : S.atk === "middle" ? front.filter(k => posOf("L",k) === 3) : [...front, ...back];
+      if(!elig.length) elig = front.length ? front : back;
+    }
+    ui.step.textContent = S.atk === "setter" ? "3 · Tocca l’alzatore: attacca di seconda"
+      : S.atk === "back" ? "3 · Tocca chi attacca dalla seconda linea" : S.atk === "middle" ? "3 · Tocca il centrale" : "3 · Tocca chi attacca";
+    st.phase = "atk"; pick(elig);
+  }
+  function attackSpot(n){
+    if(S.atk === "setter") return [els.get(n)._f[0] + .01, els.get(n)._f[1]];
+    const p = posOf("L",n);
+    if([1,5,6].includes(p)) return [.28, ({5:.22,6:.5,1:.78})[p]];
+    if(p === 3) return [.43, S.atk === "middle" ? clamp(st.setterSpot[1] - .14, .2, .8) : .45];
+    return [.43, ({4:.13,2:.87})[p]];
+  }
+  async function onAtk(n){
+    const G = gen;
+    st.phase = "busy"; pick([]); st.atk = n; setTag(n, "att."); els.get(n).classList.add("act");
+    const A = attackSpot(n); st.A = A; setPos(n, ...A);
+    await wait(300);
+    if(G !== gen) return;
+    line(ball._f, A, "trail");
+    await fly([A[0]+.015, A[1]-.05], S.atk === "middle" ? .1 : .32, S.atk === "middle" ? 450 : 850);
+    if(G !== gen) return;
+    // copertura 3-2
+    const cov = st.L.filter(k => k !== n);
+    const spots = [[A[0]-.1,A[1]-.2],[A[0]-.16,A[1]],[A[0]-.1,A[1]+.2],[A[0]-.3,A[1]-.28],[A[0]-.3,A[1]+.28]].map(([x,y]) => [clamp(x,.03,.47), clamp(y,.05,.95)]);
+    assign(cov, spots, k => els.get(k)._f).forEach((s,k) => setPos(k, ...s));
+    const [cx,cy] = px(...A); svg("circle",{cx,cy,r:W*.88*.115,class:"cover"});
+    // muro e difesa avversaria
+    const ya = A[1], lineY = ya < .5 ? .08 : .92, crossY = 1 - lineY;
+    const front = st.R.filter(k => [2,3,4].includes(posOf("R",k))).sort((a,b) => Math.abs(NAT.R[posOf("R",a)][1]-ya) - Math.abs(NAT.R[posOf("R",b)][1]-ya));
+    const blockers = front.slice(0, S.blk);
+    const shift = (Math.random() < .5 ? -1 : 1) * .03;
+    st.closes = shift * (ya < .5 ? 1 : -1) < 0 ? "lungolinea" : "diagonale";
+    const offs = {1:[0], 2:[-.08,.08], 3:[-.15,0,.15]}[S.blk];
+    const by = offs.map(o => clamp(ya + o + shift, .05, .95)).sort((a,b) => a-b);
+    assign(blockers, by.map(y => [.56, y]), k => NAT.R[posOf("R",k)]).forEach((s,k) => setPos(k, ...s));
+    st.block = [by[0] - .05, by[by.length-1] + .05];
+    const SYS = {
+      perimetrale:[[.92,lineY],[.9,crossY],[.95,.5],[.7,crossY],[.8,.5]],
+      rotazione:[[.7,clamp(lineY+(ya<.5?.08:-.08),0,1)],[.93,lineY],[.88,crossY],[.68,crossY],[.82,.5]],
+      avanzato:[[.66,ya],[.88,lineY],[.88,crossY],[.72,crossY],[.9,.5]]
+    }[S.def];
+    const defenders = st.R.filter(k => !blockers.includes(k));
+    st.defSpots = assign(defenders, SYS.slice(0, defenders.length).map(([x,y]) => [x + (Math.random()-.5)*.04, clamp(y + (Math.random()-.5)*.06, .04, .96)]), k => NAT.R[posOf("R",k)]);
+    st.defSpots.forEach((s,k) => setPos(k, ...s));
+    // ombra del muro
+    const [ax,ay] = px(...A), sh = (y) => { const k = (.56 - A[0]); return [1.0, A[1] + (y - A[1]) * (1 - A[0]) / k]; };
+    const p1 = px(.56, st.block[0]), p2 = px(.56, st.block[1]), p3 = px(...sh(st.block[1])), p4 = px(...sh(st.block[0]));
+    const [cl,ct] = px(.5,0), [cr,cb] = px(1,1);
+    const cp = svg("clipPath",{id:"cclip"}); svg("rect",{x:cl,y:ct,width:cr-cl,height:cb-ct}, cp);
+    svg("polygon",{points:[p1,p2,p3,p4].map(p => p.join(",")).join(" "), class:"shadowz", "clip-path":"url(#cclip)"});
+    // raggi di attacco
+    st.T = {
+      "lungolinea":[.93, lineY], "diagonale":[.9, ya < .5 ? .84 : .16], "diagonale stretta":[.64, ya < .5 ? .95 : .05],
+      "pallonetto":[.6, clamp(ya + (Math.random()-.5)*.1, .08, .92)], "mani-out":[1.06, by[ya < .5 ? 0 : by.length-1] + (ya < .5 ? -.2 : .2)], "rigiocata":[.4, clamp(ya + .12, .1, .9)]
+    };
+    S.shots.forEach(s => {
+      if(s === "rigiocata") return;
+      const T = st.T[s]; line(A, T, "ray"); label([T[0] - .02, T[1] + (T[1] < .5 ? .07 : -.03)], s, "lbl");
+    });
+    label([.78, .5], `${DEF[S.def]}, muro a ${S.blk}`, "lbl sys");
+    await wait(500);
+    if(G !== gen) return;
+    ui.step.textContent = `4 · Il muro chiude la ${st.closes}. Scegli il colpo`;
+    ui.shots.innerHTML = "";
+    S.shots.forEach(s => { const b = document.createElement("button"); b.type = "button"; b.className = "shot"; b.textContent = s; b.onclick = () => onShot(s); ui.shots.append(b); });
+    st.phase = "shot";
+  }
+  async function onShot(s){
+    const G = gen;
+    if(st.phase !== "shot") return;
+    st.phase = "busy"; ui.shots.querySelectorAll("button").forEach(b => b.disabled = true);
+    const A = st.A, T = st.T[s];
+    const yAt = x => A[1] + (T[1]-A[1]) * (x - A[0]) / (T[0] - A[0]);
+    const blocked = !["pallonetto","mani-out","rigiocata"].includes(s) && (y => y >= st.block[0] && y <= st.block[1])(yAt(.56));
+    let msg, good;
+    if(s === "rigiocata"){
+      await fly([.56, A[1]], .05, 300);
+      if(G !== gen) return;
+      const cov = st.L.filter(k => k !== st.atk).sort((a,b) => Math.hypot(els.get(a)._f[0]-T[0], els.get(a)._f[1]-T[1]) - Math.hypot(els.get(b)._f[0]-T[0], els.get(b)._f[1]-T[1]))[0];
+      const c = els.get(cov)._f; await fly([c[0]+.01, c[1]-.04], .15, 600);
+      if(G !== gen) return;
+      msg = `Rimbalzo sul muro, copertura di ${NAME.get(cov)}: si ricostruisce!`; good = true;
+    } else if(blocked){
+      await fly([.555, yAt(.555)], .03, 260);
+      if(G !== gen) return;
+      await fly([A[0]-.06, clamp(A[1]+(Math.random()-.5)*.2,.05,.95)], .05, 380);
+      if(G !== gen) return;
+      msg = `Murata! Il muro chiudeva la ${st.closes}.`; good = false;
+    } else {
+      await fly(T, s === "pallonetto" ? .2 : .04, s === "pallonetto" ? 700 : 380);
+      if(G !== gen) return;
+      if(s === "mani-out"){ msg = "Mani-out! Palla fuori dalle mani del muro: punto Purple 1."; good = true; }
+      else {
+        let best = null, bd = 9;
+        st.defSpots.forEach((p,k) => { const d = Math.hypot((p[0]-T[0])*2, p[1]-T[1]); if(d < bd){ bd = d; best = k; } });
+        const reach = s === "pallonetto" ? .14 : .1;
+        if(bd < reach){ msg = `Difesa di ${NAME.get(best)}! Lo scambio continua.`; good = false; setPos(best, T[0], T[1]); }
+        else { msg = `Punto! ${s[0].toUpperCase() + s.slice(1)} nel buco della ${DEF[S.def]}.`; good = true; }
+      }
+    }
+    const [x,y] = px(...ball._f); const b = svg("text",{x, y: y - 10, class:"boom " + (good ? "ok" : "ko")}); b.textContent = good ? "PUNTO" : "NO!";
+    ui.step.innerHTML = `<b class="${good ? "w" : "l"}">${msg}</b> Tocca ⟳ per un’altra situazione o ↺ per rigiocarla.`;
+    st.phase = "done";
+  }
+  box.addEventListener("click", e => {
+    const p = e.target.closest(".pl.pick"); if(!p) return;
+    const n = +p.dataset.n;
+    if(st.phase === "rec") onRec(n); else if(st.phase === "set") onSet(n); else if(st.phase === "atk") onAtk(n);
+  });
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); start(false); }, 150); });
+  $s("shuffle").addEventListener("click", () => start(true));
+  $s("replay").addEventListener("click", () => start(false));
+  size(); start(true);
+  return {start};
 })();
 
 function show(j){
