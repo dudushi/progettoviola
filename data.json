@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T01:15+01:00",
+ "updated": "2026-11-13T12:25+01:00",
  "matches": [
   {
    "g": 1,
@@ -223,7 +223,25 @@
    "b": "PGS Pianezza",
    "venue": "Istituto Comprensivo",
    "city": "Caselette",
-   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette"
+   "q": "Istituto Comprensivo - Strada Contessa, 90 - Caselette",
+   "score": [
+    3,
+    0
+   ],
+   "sets": [
+    [
+     25,
+     16
+    ],
+    [
+     25,
+     17
+    ],
+    [
+     26,
+     24
+    ]
+   ]
   },
   {
    "g": 3,
