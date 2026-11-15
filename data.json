@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13T12:25+01:00",
+ "updated": "2026-11-15T23:37+01:00",
  "matches": [
   {
    "g": 1,
@@ -244,6 +244,16 @@
    ]
   },
   {
+   "g": 12,
+   "n": 611156,
+   "t": "2026-11-16T20:45:00+01:00",
+   "a": "Kubo Volley",
+   "b": "ASD Ecosportorino Dark",
+   "venue": "Palestra Palazzeschi",
+   "city": "Torino",
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+  },
+  {
    "g": 3,
    "n": 611114,
    "t": "2026-11-16T21:00:00+01:00",
@@ -252,16 +262,6 @@
    "venue": "Pal. Papa Giovanni XXIII",
    "city": "Pianezza",
    "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
-  },
-  {
-   "g": 12,
-   "n": 611156,
-   "t": "2026-11-16T21:00:00+01:00",
-   "a": "Kubo Volley",
-   "b": "ASD Ecosportorino Dark",
-   "venue": "Palestra Palazzeschi",
-   "city": "Torino",
-   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
   },
   {
    "g": 3,
