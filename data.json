@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-15T23:37+01:00",
+ "updated": "2026-11-17T13:54+01:00",
  "matches": [
   {
    "g": 1,
@@ -251,7 +251,29 @@
    "b": "ASD Ecosportorino Dark",
    "venue": "Palestra Palazzeschi",
    "city": "Torino",
-   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino"
+   "q": "Palestra Palazzeschi - Scuola Media Statale Aldo Palazzeschi, Torino",
+   "score": [
+    1,
+    3
+   ],
+   "sets": [
+    [
+     19,
+     25
+    ],
+    [
+     19,
+     25
+    ],
+    [
+     25,
+     22
+    ],
+    [
+     20,
+     25
+    ]
+   ]
   },
   {
    "g": 3,
@@ -261,7 +283,29 @@
    "b": "Kolbe",
    "venue": "Pal. Papa Giovanni XXIII",
    "city": "Pianezza",
-   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza"
+   "q": "Pal. Papa Giovanni XXIII - Via A. Manzoni 7, Pianezza",
+   "score": [
+    1,
+    3
+   ],
+   "sets": [
+    [
+     25,
+     19
+    ],
+    [
+     22,
+     25
+    ],
+    [
+     19,
+     25
+    ],
+    [
+     16,
+     25
+    ]
+   ]
   },
   {
    "g": 3,
