@@ -7,6 +7,9 @@ FILE_ID = "1HxbnxHDU9dUw3kheqOQOVoNASoB-FIl_"
 URL = f"https://drive.google.com/uc?export=download&id={FILE_ID}"
 TZ = ZoneInfo("Europe/Rome")
 CITIES = ["Borgone di Susa", "Pianezza", "Caselette", "Brandizzo", "Torino"]
+# parole che nel file indicano una partita rinviata, sospesa o da recuperare
+POSTPONED = re.compile(r"rinvi|postic|sospes|annull|recuper|da definire|da destinarsi|chiusura", re.I)
+MIN_YEAR = 2020
 
 def roman(s):
     v = {"I": 1, "V": 5, "X": 10, "L": 50}
@@ -37,7 +40,10 @@ def to_date(v):
     if not m:
         return None
     d, mo, y = map(int, m.groups())
-    return dt.date(y + 2000 if y < 100 else y, mo, d)
+    try:
+        return dt.date(y + 2000 if y < 100 else y, mo, d)
+    except ValueError:  # es. "00/01/00": data cancellata nel file
+        return None
 
 def to_time(v):
     if isinstance(v, dt.time):
@@ -65,9 +71,15 @@ def place(raw):
     return {"venue": short, "city": city, "q": q}
 
 def match(g, n, d, t, a, b, venue_raw, note, score, sets):
-    when = dt.datetime.combine(d, t, tzinfo=TZ)
+    # data mancante o finta (cella vuota = 1899/1900 in Excel): partita senza data
+    if d is not None and d.year < MIN_YEAR:
+        d = None
     sets = [list(s) for s in sets if s[0] or s[1]]
-    m = {"g": g, "n": n, "t": when.isoformat(), "a": a, "b": b, **place(venue_raw)}
+    m = {"g": g, "n": n, "t": dt.datetime.combine(d, t, tzinfo=TZ).isoformat() if d else None,
+         "a": a, "b": b, **place(venue_raw)}
+    played = bool((score and (score[0] or score[1])) or sets)
+    if not played and (d is None or (note and POSTPONED.search(note))):
+        m["postponed"] = True
     if note:
         m["note"] = note[0].upper() + note[1:]
     if score and (score[0] or score[1]):
@@ -89,14 +101,40 @@ def parse_sheet(ws):
         j = next((k for k, c in enumerate(txt[:6]) if re.fullmatch(r"\d{5,7}(\.0)?", c)), None)
         if j is None or not g:
             continue
-        d, a, b = to_date(cells[j + 1]), clean(cells[j + 3]), clean(cells[j + 5])
-        if not (d and a and b):
-            continue
-        sets = [(num(cells[j + 11 + 2 * k]), num(cells[j + 12 + 2 * k])) for k in range(5)]
-        out.append(match(g, num(cells[j]), d, to_time(cells[j + 2]), a, b,
-                         cells[j + 6], clean(cells[j + 7]),
-                         (num(cells[j + 9]), num(cells[j + 10])), sets))
+        try:
+            a, b = clean(cells[j + 3]), clean(cells[j + 5])
+            if not (a and b):
+                continue
+            d = to_date(cells[j + 1])
+            # la nota a volte è nella colonna dopo (es. "rinvio per chiusura...")
+            note = clean(cells[j + 7]) or clean(cells[j + 8])
+            if note.isdigit():
+                note = ""
+            sets = [(num(cells[j + 11 + 2 * k]), num(cells[j + 12 + 2 * k])) for k in range(5)]
+            out.append(match(g, num(cells[j]), d, to_time(cells[j + 2]), a, b,
+                             cells[j + 6], note, (num(cells[j + 9]), num(cells[j + 10])), sets))
+        except Exception as e:  # una riga strana non deve bloccare tutto
+            print(f"Riga saltata ({txt[j] if j is not None else '?'}): {e}")
     return out
+
+def apply_override(matches):
+    """Correzioni a mano da override.json (es. una data di recupero non ancora nel file ufficiale)."""
+    try:
+        ov = json.load(open("override.json", encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    for m in matches:
+        o = ov.get(str(m["n"]))
+        if not isinstance(o, dict):
+            continue
+        if o.get("only_if_missing") and m.get("t") and not m.get("postponed"):
+            continue  # il file ufficiale ora ha la data: vince lui
+        for k in ("t", "note", "venue", "city", "q"):
+            if o.get(k):
+                m[k] = o[k]
+        if o.get("t"):
+            m.pop("postponed", None)
+            m["override"] = True
 
 def main():
     import openpyxl
@@ -108,14 +146,21 @@ def main():
     matches = next((m for m in (parse_sheet(ws) for ws in wb.worksheets) if len(m) >= 10), None)
     if not matches:
         sys.exit("Non ho trovato le partite nel file: forse è cambiato il formato.")
-    matches.sort(key=lambda m: (m["t"], m["n"]))
+    apply_override(matches)
+    seen = {}
+    for m in matches:  # una partita per numero gara
+        seen[m["n"]] = m
+    matches = sorted(seen.values(), key=lambda m: (m["t"] is None, m["t"] or "", m["n"]))
     try:
         old = json.load(open("data.json", encoding="utf-8"))
-        if old.get("matches") == matches:
-            print("Nessuna novità.")
-            return
     except (OSError, ValueError):
-        pass
+        old = {}
+    old_n = len(old.get("matches", []))
+    if old_n >= 30 and len(matches) < 0.9 * old_n:
+        sys.exit(f"Trovate solo {len(matches)} partite contro {old_n}: il file sembra cambiato, tengo i dati vecchi.")
+    if old.get("matches") == matches:
+        print("Nessuna novità.")
+        return
     out = {"updated": dt.datetime.now(TZ).isoformat(timespec="minutes"), "matches": matches}
     json.dump(out, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"Aggiornato: {len(matches)} partite.")
