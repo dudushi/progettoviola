@@ -193,8 +193,36 @@ function use(json){
 }
 $("#rival").innerHTML = RIVALS.map(r => `<option>${r}</option>`).join("");
 $("#rival").addEventListener("change", show);
-use(SNAPSHOT); show();
-fetch("data.json?t="+Date.now(), {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(j => { if(j){ use(j); show(); } }).catch(() => {});
+
+/* correzioni a mano (override.json) finché il file ufficiale non si aggiorna */
+const OVERRIDE_FALLBACK = {"_come_si_usa": "Correzioni a mano, valgono finche il file ufficiale non viene aggiornato. Chiave = numero gara. only_if_missing: true = si applica solo se nel file ufficiale la data manca o la partita risulta rinviata.", "611109": {"t": "2026-12-17T21:15:00+01:00", "note": "Recupero della partita rinviata l'11/11", "only_if_missing": true}};
+function applyOverride(j, ov){
+  if(!j || !Array.isArray(j.matches) || !ov) return j;
+  return {...j, matches: j.matches.map(m => {
+    const o = ov[String(m.n)];
+    if(!o || typeof o !== "object") return m;
+    if(o.only_if_missing && m.t && !m.postponed) return m;
+    const r = {...m};
+    ["t","note","venue","city","q"].forEach(k => { if(o[k]) r[k] = o[k]; });
+    if(o.t){ delete r.postponed; r.override = true; }
+    return r;
+  })};
+}
+async function loadOverride(){
+  try{
+    const r = await fetch("override.json?t="+Date.now(), {cache:"no-store"});
+    if(!r.ok) throw 0;
+    const o = await r.json();
+    try{ localStorage.setItem("purple-override", JSON.stringify(o)); }catch(e){}
+    return o;
+  }catch(e){
+    try{ const c = JSON.parse(localStorage.getItem("purple-override") || "null"); if(c) return c; }catch(e){}
+    return OVERRIDE_FALLBACK;
+  }
+}
+use(applyOverride(SNAPSHOT, OVERRIDE_FALLBACK)); show();
+Promise.all([fetch("data.json?t="+Date.now(), {cache:"no-store"}).then(r => r.ok ? r.json() : null).catch(() => null), loadOverride()])
+  .then(([j,o]) => { if(j && Array.isArray(j.matches)){ use(applyOverride(j, o)); show(); } });
 </script>
 </body>
 </html>

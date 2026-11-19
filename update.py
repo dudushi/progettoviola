@@ -117,6 +117,25 @@ def parse_sheet(ws):
             print(f"Riga saltata ({txt[j] if j is not None else '?'}): {e}")
     return out
 
+def apply_override(matches):
+    """Correzioni a mano da override.json (es. una data di recupero non ancora nel file ufficiale)."""
+    try:
+        ov = json.load(open("override.json", encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    for m in matches:
+        o = ov.get(str(m["n"]))
+        if not isinstance(o, dict):
+            continue
+        if o.get("only_if_missing") and m.get("t") and not m.get("postponed"):
+            continue  # il file ufficiale ora ha la data: vince lui
+        for k in ("t", "note", "venue", "city", "q"):
+            if o.get(k):
+                m[k] = o[k]
+        if o.get("t"):
+            m.pop("postponed", None)
+            m["override"] = True
+
 def main():
     import openpyxl
     req = urllib.request.Request(URL, headers={"User-Agent": "Mozilla/5.0"})
@@ -127,6 +146,7 @@ def main():
     matches = next((m for m in (parse_sheet(ws) for ws in wb.worksheets) if len(m) >= 10), None)
     if not matches:
         sys.exit("Non ho trovato le partite nel file: forse è cambiato il formato.")
+    apply_override(matches)
     seen = {}
     for m in matches:  # una partita per numero gara
         seen[m["n"]] = m

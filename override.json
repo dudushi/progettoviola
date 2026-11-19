@@ -1,0 +1,8 @@
+{
+  "_come_si_usa": "Correzioni a mano, valgono finche il file ufficiale non viene aggiornato. Chiave = numero gara. only_if_missing: true = si applica solo se nel file ufficiale la data manca o la partita risulta rinviata.",
+  "611109": {
+    "t": "2026-12-17T21:15:00+01:00",
+    "note": "Recupero della partita rinviata l'11/11",
+    "only_if_missing": true
+  }
+}
